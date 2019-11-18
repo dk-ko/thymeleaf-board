@@ -1,0 +1,33 @@
+spring:
+  profiles: common
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  jpa:
+    open-in-view: false
+
+server:
+  port: 8081
+
+---
+spring.profiles: test
+spring.profiles.include: common
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    hikari:
+      jdbc-url: jdbc:h2:mem:demo
+      username: sa
+      password:
+  jpa:
+    show-sql: true
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
+      path: /h2/

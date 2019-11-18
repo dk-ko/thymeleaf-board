@@ -12,7 +12,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 public class Comment extends BaseEntity implements Serializable {
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)

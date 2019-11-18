@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-@Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString(callSuper = true)

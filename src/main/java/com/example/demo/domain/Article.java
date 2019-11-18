@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Entity
-@Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)

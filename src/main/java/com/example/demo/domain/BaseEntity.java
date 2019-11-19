@@ -25,15 +25,4 @@ public class BaseEntity {
     @Column
     @LastModifiedDate
     protected LocalDateTime updatedDate;
-
-//    @PrePersist
-//    public void onPrePersist() {
-//        this.createdDate = LocalDateTime.now(); // TODO ZonedDateTime으로 해야하는가 ?
-//        this.updatedDate = this.createdDate;
-//    }
-//
-//    @PreUpdate
-//    public void onPreUpdate() {
-//        this.updatedDate = LocalDateTime.now();
-//    }
 }

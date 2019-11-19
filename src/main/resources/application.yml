@@ -42,7 +42,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/pilot?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+      jdbc-url: jdbc:mysql://localhost:3306/pilot_board?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
       username: root
       password: root
   jpa:

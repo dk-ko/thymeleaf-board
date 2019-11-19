@@ -13,7 +13,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Board extends BaseEntity implements Serializable {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 15)
     String name;
 
     @OneToMany(mappedBy = "board",

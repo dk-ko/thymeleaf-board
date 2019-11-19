@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class Comment extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
+    @Lob
     private String contents;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)

@@ -16,10 +16,11 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Article extends BaseEntity implements Serializable {
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column
+    @Column(nullable = false)
+    @Lob
     private String contents;
 
     @Column(nullable = false)
@@ -28,13 +29,16 @@ public class Article extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private Integer recommendCnt = 0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 16)
     private String createdIP;
 
-    @Column
+    @Column(length = 16)
     private String updatedIp;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @Column(nullable = false, length = 20)
+    private String userName;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_article_user"),
                 nullable = false)
     private User user;
@@ -52,7 +56,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @Builder
     public Article(String title, String contents, Integer readCnt, Integer recommendCnt,
-                   String createdIP, String updatedIp, User user, Board board, List<Comment> commentList) {
+                   String createdIP, String updatedIp, String userName, User user, Board board, List<Comment> commentList) {
         Assert.notNull(title, "title must be provided.");
         Assert.notNull(contents, "contents must be provided.");
         checkIP(createdIP, "createdIP value is invalid");
@@ -63,6 +67,7 @@ public class Article extends BaseEntity implements Serializable {
         this.recommendCnt = Optional.ofNullable(recommendCnt).orElse(this.recommendCnt);
         this.createdIP = createdIP;
         this.updatedIp = updatedIp;
+        this.userName = userName;
         this.user = user;
         this.board = board;
         this.commentList = Optional.ofNullable(commentList).orElse(this.commentList);

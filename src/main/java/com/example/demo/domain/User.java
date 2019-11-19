@@ -13,10 +13,10 @@ import java.util.Optional;
 @Getter
 @ToString(callSuper = true)
 public class User extends BaseEntity implements Serializable {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 20)
     private String account;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String password;
 
     @OneToMany(mappedBy = "user",

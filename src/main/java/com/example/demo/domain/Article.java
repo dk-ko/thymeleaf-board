@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.res.ArticleResDto;
 import lombok.*;
 import org.springframework.util.Assert;
 
@@ -43,14 +44,14 @@ public class Article extends BaseEntity implements Serializable {
                 nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_article_board"),
                 nullable = false)
     private Board board;
 
     @OneToMany(mappedBy = "article",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER,
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
@@ -80,5 +81,30 @@ public class Article extends BaseEntity implements Serializable {
         Pattern pattern = Pattern.compile(IP_ADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(createdIP);
         if (!matcher.matches()) throw new IllegalStateException(message);
+    }
+
+    public void editArticle(String title, String contents, String updatedIp) {
+        Assert.notNull(title, "title must be provided.");
+        Assert.notNull(contents, "contents must be provided.");
+        checkIP(updatedIp, "updatedIp value is invalid");
+
+        this.title = title;
+        this.contents = contents;
+        this.updatedIp = updatedIp;
+    }
+
+    public ArticleResDto toResDto() {
+        return ArticleResDto.builder()
+                .title(this.title)
+                .contents(this.contents)
+                .readCnt(this.readCnt)
+                .recommendCnt(this.recommendCnt)
+                .createdIP(this.createdIP)
+                .updatedIp(this.updatedIp)
+                .userName(this.userName)
+                .createdDate(this.createdDate)
+                .updatedDate(this.updatedDate)
+                .commentList(this.commentList)
+                .build();
     }
 }

@@ -14,17 +14,21 @@ import java.util.Optional;
 @ToString(callSuper = true)
 public class Board extends BaseEntity implements Serializable {
     @Column(nullable = false, unique = true, length = 15)
-    String name;
+    private String name;
 
     @OneToMany(mappedBy = "board",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY, // TODO EAGER ? > 우선 개발 진행해보고 수정
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
-    List<Article> articleList = new ArrayList<>();
+    private List<Article> articleList = new ArrayList<>();
 
     @Builder
     public Board(String name, List<Article> articleList) {
         this.name = name;
         this.articleList = Optional.ofNullable(articleList).orElse(this.articleList);
+    }
+
+    public void editBoardName(String name) {
+        this.name = name;
     }
 }

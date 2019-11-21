@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.common.model.PageRequest;
 import com.example.demo.domain.Article;
 import com.example.demo.domain.Board;
 import com.example.demo.domain.User;
@@ -10,7 +11,6 @@ import com.example.demo.repository.ArticleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,24 +37,24 @@ public class ArticleService {
 
     /**
      * 게시글 1개 수정
-     * @param idx 수정할 게시글 idx
+     * @param articleIdx 수정할 게시글 idx
      * @param dto 수정할 게시글 데이터(title, contents, updatedIp)
      * @return 수정한 게시글
      */
     @Transactional
-    public ArticleResDto editArticle(Long idx, ArticleUpdateReqDto dto) {
-        Article foundArticle = findByIdx(idx);
+    public ArticleResDto editArticle(Long articleIdx, ArticleUpdateReqDto dto) { // TODO Add user
+        Article foundArticle = findByIdx(articleIdx);
         foundArticle.editArticle(dto.getTitle(), dto.getContents(), dto.getUpdatedIp());
         return articleRepository.save(foundArticle).toResDto();
     }
 
     /**
      * 게시글 1개 삭제 (관계된 comment 전체 삭제)
-     * @param idx 삭제할 게시글 idx
+     * @param articleIdx 삭제할 게시글 idx
      */
     @Transactional
-    public boolean deleteArticle(Long idx) {
-        articleRepository.deleteById(idx);
+    public boolean deleteArticle(Long articleIdx) { // TODO add user
+        articleRepository.deleteById(articleIdx);
         return true;
     }
 
@@ -79,17 +79,17 @@ public class ArticleService {
                 .build()).toResDto();
     }
 
-    /** 게시글 목록 조회(페이징) **/
-    // TODO 파라미터가 필요한지.. 프론트 개발하며 수정할 것.
+    /**
+     * 게시글 목록 조회(페이징)
+     * @param boardIdx 조회할 게시판
+     * @param pageRequest 페이징 정보
+     * @return 조회한 페이지의 게시글들
+     */
     @Transactional(readOnly = true)
-    public Page<Article> getArticlesByPageable(Pageable pageable) {
-        pageable.getOffset();
-        pageable.getPageSize();
-        pageable.getPageNumber();
-
-        log.info(pageable.toString());
-        PageRequest pageRequest;
-        return articleRepository.findAll(pageable);
+    public Page<Article> getArticlesByPageable(Long boardIdx, PageRequest pageRequest) {
+        log.info(pageRequest.toString());
+        Board foundBoard = boardService.getBoard(boardIdx);
+        return articleRepository.findAllByBoard(foundBoard, pageRequest.of());
     }
 
     private Article findByIdx(Long idx) {

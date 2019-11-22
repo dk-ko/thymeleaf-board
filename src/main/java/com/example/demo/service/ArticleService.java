@@ -26,13 +26,16 @@ public class ArticleService {
     private final BoardService boardService;
 
     /**
-     * 게시글 1개 조회
+     * 게시글 1개 조회 (조회수 추가)
      * @param idx 조회할 게시글 idx
      * @return 조회한 게시글
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public ArticleResDto getArticle(Long idx) {
-        return findByIdx(idx).toResDto();
+        Article foundArticle = findByIdx(idx);
+        foundArticle.addReadCnt();
+        articleRepository.save(foundArticle);
+        return foundArticle.toResDto();
     }
 
     /**
@@ -94,6 +97,17 @@ public class ArticleService {
         log.info(pageRequest.toString());
         Board foundBoard = boardService.getBoard(boardIdx);
         return articleRepository.findAllByBoard(foundBoard, pageRequest.of()).map(Article::toListResDto);
+    }
+
+    /**
+     * 추천수 증가
+     * @param articleIdx 추천수 증가시킬 게시글 idx
+     * @exception UnauthorizedException 로그인 유저만 추천 가능
+     */
+    @Transactional
+    public void addRecommendCnt(Long articleIdx, User user) {
+        // TODO 로그인 유저 체크 추가
+        findByIdx(articleIdx).addRecommendCnt();
     }
 
     private void checkUser(Article article, User user) {

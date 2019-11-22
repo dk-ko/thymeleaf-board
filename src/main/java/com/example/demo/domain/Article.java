@@ -94,6 +94,14 @@ public class Article extends BaseEntity implements Serializable {
         this.lastUpdatedIp = updatedIp;
     }
 
+    public void addReadCnt() {
+        this.readCnt++;
+    }
+
+    public void addRecommendCnt() {
+        this.recommendCnt++;
+    }
+
     public ArticleResDto toResDto() {
         return ArticleResDto.builder()
                 .articleIdx(this.idx)

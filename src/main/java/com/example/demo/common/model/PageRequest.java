@@ -1,12 +1,13 @@
 package com.example.demo.common.model;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 @Getter
+@ToString
 public final class PageRequest {
-    private static final int DEFAULT_SIZE = 15;
-    private static final String PROPERTIES = "createdDate";
+    private final int DEFAULT_SIZE = 15;
 
     private int page;
     private int size = DEFAULT_SIZE;
@@ -18,6 +19,7 @@ public final class PageRequest {
 
     public void setSize(int size) {
         int MAX_SIZE = 50; // TODO Max size를 지정할 필요가 있을까?
+        int DEFAULT_SIZE = 15;
         this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
     }
 
@@ -26,6 +28,6 @@ public final class PageRequest {
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, PROPERTIES);
+        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "createdDate");
     }
 }

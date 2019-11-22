@@ -44,4 +44,13 @@ public class User extends BaseEntity implements Serializable {
     protected void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+
+        User inputUser = (User) o;
+        return this.getIdx().equals(inputUser.getIdx());
+    }
 }

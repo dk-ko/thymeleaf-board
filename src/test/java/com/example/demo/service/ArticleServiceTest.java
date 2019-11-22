@@ -212,6 +212,35 @@ public class ArticleServiceTest extends IntegrationTest {
                 .build();
     }
 
+    @Test
+    public void 조회수테스트() {
+        // given
+        Article article = generateArticle();
+        articleRepository.save(article);
+        log.info("article.getReadCnt() : {}", article.getReadCnt());
+        assertThat(article.getReadCnt(), is(0));
+
+        // when
+        articleService.getArticle(article.getIdx());
+
+        // then
+        assertThat(article.getReadCnt() > 0, is(true));
+    }
+
+    @Test
+    public void 추천수테스트() {
+        // given
+        Article article = generateArticle();
+        articleRepository.save(article);
+        log.info("article.getRecommendCnt() : {}", article.getRecommendCnt());
+
+        // when
+        articleService.addRecommendCnt(article.getIdx());
+
+        // then
+        assertThat(article.getRecommendCnt() > 0, is(true));
+    }
+
     private Article generateArticle() {
         return Article.builder()
                 .title("title")

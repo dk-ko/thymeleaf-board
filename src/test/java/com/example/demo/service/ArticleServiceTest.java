@@ -235,7 +235,7 @@ public class ArticleServiceTest extends IntegrationTest {
         log.info("article.getRecommendCnt() : {}", article.getRecommendCnt());
 
         // when
-        articleService.addRecommendCnt(article.getIdx());
+        articleService.addRecommendCnt(article.getIdx(), user);
 
         // then
         assertThat(article.getRecommendCnt() > 0, is(true));

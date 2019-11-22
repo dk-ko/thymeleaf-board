@@ -33,7 +33,7 @@ public class ArticleService {
     @Transactional
     public ArticleResDto getArticle(Long idx) {
         Article foundArticle = findByIdx(idx);
-        foundArticle.addReadCnt();
+        foundArticle.addReadCnt(); // TODO 조회수는 제한 없이 할지, ip별로 구분해서 할지
         articleRepository.save(foundArticle);
         return foundArticle.toResDto();
     }
@@ -106,7 +106,7 @@ public class ArticleService {
      */
     @Transactional
     public void addRecommendCnt(Long articleIdx, User user) {
-        // TODO 로그인 유저 체크 추가
+        // TODO 로그인 유저 체크 추가, 중복 추천 체크 (로그인 유저 기준)
         findByIdx(articleIdx).addRecommendCnt();
     }
 

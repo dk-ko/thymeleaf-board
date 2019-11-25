@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import javafx.scene.shape.Arc;
+import com.example.demo.erros.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -47,7 +47,7 @@ public class ArticleTest {
         Article ipArticle = Article.builder().build();
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = InvalidFormatException.class)
     public void incorrect_ip_test() {
         Article incorrectIpArticle = Article.builder()
                 .title("title")
@@ -61,6 +61,16 @@ public class ArticleTest {
                 .title("title")
                 .contents("contents")
                 .createdIP("127.0.0.1")
+                .build();
+    }
+
+    // TODO annotation
+    @Test(expected = InvalidFormatException.class)
+    public void annotation_test() {
+        Article createArticle = Article.builder()
+                .title("title")
+                .contents("contents")
+                .createdIP("0")
                 .build();
     }
 }

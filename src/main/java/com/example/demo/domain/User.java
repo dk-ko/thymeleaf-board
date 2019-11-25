@@ -16,6 +16,9 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false, unique = true, length = 20)
     private String account;
 
+    @Column(nullable = false, length = 20)
+    private String name;
+
     @Column(nullable = false, length = 300)
     private String password;
 
@@ -30,8 +33,9 @@ public class User extends BaseEntity implements Serializable {
     List<Article> articleList = new ArrayList<>();
 
     @Builder
-    public User(String account, String password, List<Comment> commentList, List<Article> articleList) {
+    public User(String account, String name, String password, List<Comment> commentList, List<Article> articleList) {
         this.account = account;
+        this.name = name;
         this.password = password;
         this.commentList = Optional.ofNullable(commentList).orElse(this.commentList);
         this.articleList = Optional.ofNullable(articleList).orElse(this.articleList);
@@ -39,5 +43,14 @@ public class User extends BaseEntity implements Serializable {
 
     protected void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+
+        User inputUser = (User) o;
+        return this.getIdx().equals(inputUser.getIdx());
     }
 }

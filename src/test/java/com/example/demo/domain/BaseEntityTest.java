@@ -23,14 +23,14 @@ public class BaseEntityTest {
 
     @Test
     public void id값생성테스트() {
-        User user = userRepository.save(User.builder().account("testId").password("testPasswd").build());
+        User user = userRepository.save(generatedUser(1));
         log.info(user.toString());
         assertNotNull(user.getIdx());
     }
 
     @Test
     public void jpaAuditing_createdDate_테스트() {
-        User user = userRepository.save(User.builder().account("testId2").password("testPasswd").build());
+        User user = userRepository.save(generatedUser(2));
         log.info(user.toString());
         assertNotNull(user.getCreatedDate());
     }
@@ -38,7 +38,7 @@ public class BaseEntityTest {
     @Test
     public void jpaAuditing_updatedDate_테스트() {
         // given
-        User user = userRepository.save(User.builder().account("testId3").password("testPasswd").build());
+        User user = userRepository.save(generatedUser(3));
         User foundUser = userRepository.findById(user.getIdx()).orElseThrow(IllegalArgumentException::new);
         log.info("foundUser create date:{}", foundUser.getCreatedDate());
         log.info("foundUser updated date:{}", foundUser.getUpdatedDate());
@@ -52,5 +52,13 @@ public class BaseEntityTest {
         log.info("changedUser create date:{}", changedUser.getCreatedDate().toString());
         log.info("changedUser update date:{}", changedUser.getUpdatedDate().toString());
         assertNotEquals(changedUser.getCreatedDate(), changedUser.getUpdatedDate());
+    }
+
+    private User generatedUser(int index) {
+        return User.builder()
+                .account("testId" + index)
+                .name("testUser" + index)
+                .password("password" + index)
+                .build();
     }
 }

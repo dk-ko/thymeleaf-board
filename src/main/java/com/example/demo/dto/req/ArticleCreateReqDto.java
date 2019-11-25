@@ -23,7 +23,7 @@ public class ArticleCreateReqDto {
     private String createdIP;
 
     @Builder
-    public ArticleCreateReqDto(String title, String contents, String createdIP) {
+    public ArticleCreateReqDto(final String title, final String contents, final String createdIP) {
         IPFormatUtils.checkIP(createdIP, "createdIP value is invalid");
 
         this.title = title;
@@ -31,7 +31,7 @@ public class ArticleCreateReqDto {
         this.createdIP = createdIP;
     }
 
-    public Article toEntity(User user, Board board) {
+    public Article toEntity(final User user, final Board board) {
         return Article.builder()
                 .title(this.title)
                 .contents(this.contents)

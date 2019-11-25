@@ -171,7 +171,7 @@ public class ArticleServiceTest extends IntegrationTest {
     }
 
     @Test
-    public void article생성success테스트() {
+    public void article생성success_연관관계확인_테스트() {
         // given
         ArticleCreateReqDto dto = ArticleCreateReqDto.builder()
                 .title("create article dto")
@@ -183,7 +183,15 @@ public class ArticleServiceTest extends IntegrationTest {
         ArticleResDto createdArticle = articleService.createArticle(dto, user, board.getIdx());
 
         // then
-        assertNotEquals(articleRepository.findById(createdArticle.getArticleIdx()), is(Optional.empty()));
+        Optional<Article> foundArticle = articleRepository.findById(createdArticle.getArticleIdx());
+        log.info("foundArticle.get() : {}", foundArticle.get());
+        assertNotEquals(foundArticle, is(Optional.empty()));
+
+        log.info("user.getArticleList() : {}", user.getArticleList());
+        assertNotEquals(user.getArticleList().size(), 0);
+
+        log.info("board.getArticleList() : {}", board.getArticleList());
+        assertNotEquals(board.getArticleList().size(), 0);
     }
 
     @Test(expected = InvalidFormatException.class) // 객체를 사용해 직접 저장할 때 어노테이션이 동작함. (2)

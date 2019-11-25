@@ -21,5 +21,7 @@ public class ArticleResDto {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private List<Comment> commentList;
-    // TODO board 정보가 필요한가?
+    // TODO board 정보가 필요한가? > 필요하다면 dto로
+    // User 내용
+    // comment dto로
 }

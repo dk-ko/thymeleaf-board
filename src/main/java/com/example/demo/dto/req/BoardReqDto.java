@@ -14,7 +14,7 @@ public class BoardReqDto {
     private String name;
 
     @Builder
-    public BoardReqDto(String name) {
+    public BoardReqDto(final String name) {
         this.name = name;
     }
 

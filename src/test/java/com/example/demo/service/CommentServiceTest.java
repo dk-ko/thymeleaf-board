@@ -92,13 +92,13 @@ public class CommentServiceTest extends IntegrationTest {
         CommentReqDto createDto = CommentReqDto.builder()
                 .contents("댓글 작성")
                 .build();
-        commentService.createComment(article.getIdx(), writer, createDto);
+        CommentResDto savedComment = commentService.createComment(article.getIdx(), writer, createDto);
 
         // when & then
         CommentReqDto editDto = CommentReqDto.builder()
                 .contents("댓글 수정")
                 .build();
-        commentService.editComment(article.getIdx(), reader, editDto);
+        commentService.editComment(savedComment.getIdx(), reader, editDto);
     }
 
     @Test
@@ -108,13 +108,13 @@ public class CommentServiceTest extends IntegrationTest {
         CommentReqDto createDto = CommentReqDto.builder()
                 .contents(CREATED_CONTENTS)
                 .build();
-        commentService.createComment(article.getIdx(), writer, createDto);
+        CommentResDto createdComment = commentService.createComment(article.getIdx(), writer, createDto);
 
         // when
         CommentReqDto editDto = CommentReqDto.builder()
                 .contents("댓글 수정")
                 .build();
-        CommentResDto editComment = commentService.editComment(article.getIdx(), writer, editDto);
+        CommentResDto editComment = commentService.editComment(createdComment.getIdx(), writer, editDto);
 
         // then
         assertNotEquals(editComment.getContents(), CREATED_CONTENTS);

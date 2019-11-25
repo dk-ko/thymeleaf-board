@@ -90,7 +90,7 @@ public class ArticleService {
     }
 
     /**
-     * 게시글 목록 조회(페이징)
+     * 게시글 목록 조회(페이징, 15개, 역순)
      * @param boardIdx 조회할 게시판
      * @param pageRequest 페이징 정보
      * @return 조회한 페이지의 게시글들

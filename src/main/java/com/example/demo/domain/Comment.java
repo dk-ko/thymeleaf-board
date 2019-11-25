@@ -63,4 +63,8 @@ public class Comment extends BaseEntity implements Serializable {
                 .articleResDto(this.article.toResDto())
                 .build();
     }
+
+    public void editContents(String contents) {
+        this.contents = contents;
+    }
 }

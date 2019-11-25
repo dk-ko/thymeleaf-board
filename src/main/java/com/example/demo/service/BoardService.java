@@ -33,7 +33,7 @@ public class BoardService {
      * @return 조회한 게시판
      */
     @Transactional(readOnly = true)
-    public Board getBoard(Long idx) {
+    public Board getBoard(final Long idx) {
         return boardRepository.findById(idx).orElseThrow(() -> new EntityNotFoundException("No Entity found for Board Idx"));
     }
 
@@ -43,7 +43,7 @@ public class BoardService {
      * @return 생성한 게시판 리턴
      */
     @Transactional
-    public Board createBoard(Board board) {
+    public Board createBoard(final Board board) {
         return boardRepository.save(board);
     }
 
@@ -54,7 +54,7 @@ public class BoardService {
      * @return 수정한 게시판 리턴
      */
     @Transactional
-    public Board editBoard(Long idx, String boardName) {
+    public Board editBoard(final Long idx, final String boardName) {
         Board foundBoard = boardRepository.findById(idx).orElseThrow(() -> new EntityNotFoundException("No Entity found for Board Idx"));
         foundBoard.editBoardName(boardName);
         return boardRepository.save(foundBoard);
@@ -66,7 +66,7 @@ public class BoardService {
      * @return 삭제 여부 리턴
      */
     @Transactional
-    public boolean deleteBoard(Long idx) {
+    public boolean deleteBoard(final Long idx) {
         boardRepository.deleteById(idx);
         return true;
     }

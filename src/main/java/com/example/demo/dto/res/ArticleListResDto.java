@@ -16,4 +16,5 @@ public class ArticleListResDto {
     private String userName;
     private Board board;
     private Integer numberOfComments;
+    // TODO board dto로
 }

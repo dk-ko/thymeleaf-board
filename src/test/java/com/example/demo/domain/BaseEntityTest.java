@@ -1,22 +1,16 @@
 package com.example.demo.domain;
 
+import com.example.demo.common.JpaTest;
 import com.example.demo.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @Slf4j
-@ActiveProfiles(value = "test")
-public class BaseEntityTest {
+public class BaseEntityTest extends JpaTest {
 
     @Autowired
     private UserRepository userRepository;

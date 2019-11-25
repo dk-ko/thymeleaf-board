@@ -31,6 +31,7 @@ public class BaseEntityTest extends JpaTest {
 
     @Test
     public void jpaAuditing_updatedDate_테스트() {
+        // TODO updatedDate 또 동작안하네.. 확인..
         // given
         User user = userRepository.save(generatedUser(3));
         User foundUser = userRepository.findById(user.getIdx()).orElseThrow(IllegalArgumentException::new);

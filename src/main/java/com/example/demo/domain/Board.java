@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.res.BoardResDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,5 +45,12 @@ public class Board extends BaseEntity implements Serializable {
                 ", name=" + this.name +
                 ", articleList.size()=" + this.articleList.size() +
                 "}";
+    }
+
+    public BoardResDto toResDto() {
+        return BoardResDto.builder()
+                .boardIdx(this.idx)
+                .name(this.name)
+                .build();
     }
 }

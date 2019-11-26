@@ -35,7 +35,7 @@ public class CommentService {
     public CommentResDto createComment(final Long articleIdx, final User user, final CommentReqDto dto) {
         // TODO login user check
         final Article foundArticle = articleService.findByIdx(articleIdx);
-        Comment comment = dto.toEntity(user, foundArticle);
+        Comment comment = dto.toEntity();
         comment.changeUser(user);
         comment.changeArticle(foundArticle);
         return commentRepository.save(comment).toResDto();

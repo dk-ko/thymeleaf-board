@@ -74,7 +74,7 @@ public class ArticleService {
 
     /**
      * 게시글 생성
-     * @param dto title, contents, createIp
+     * @param dto 게시글 데이터 title, contents, createIp
      * @param user 로그인한 사용자
      * @param boardIdx 작성할 게시판 idx
      * @return 생성한 게시글
@@ -82,8 +82,8 @@ public class ArticleService {
      */
     @Transactional
     public ArticleResDto createArticle(final ArticleCreateReqDto dto, final User user, final Long boardIdx) {
-        Board foundBoard = boardService.getBoard(boardIdx);
-        Article article = dto.toEntity(user, foundBoard);
+        Board foundBoard = boardService.findByIdx(boardIdx);
+        Article article = dto.toEntity();
         article.changeUser(user);
         article.changeBoard(foundBoard);
         return articleRepository.save(article).toResDto();
@@ -98,7 +98,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public Page<ArticleListResDto> getArticlesByPageable(final Long boardIdx, final PageRequest pageRequest) {
         log.info(pageRequest.toString());
-        Board foundBoard = boardService.getBoard(boardIdx);
+        Board foundBoard = boardService.findByIdx(boardIdx);
         return articleRepository.findAllByBoard(foundBoard, pageRequest.of()).map(Article::toListResDto);
     }
 

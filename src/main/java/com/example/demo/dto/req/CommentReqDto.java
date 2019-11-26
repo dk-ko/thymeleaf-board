@@ -1,8 +1,6 @@
 package com.example.demo.dto.req;
 
-import com.example.demo.domain.Article;
 import com.example.demo.domain.Comment;
-import com.example.demo.domain.User;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -20,11 +18,9 @@ public class CommentReqDto {
         this.contents = contents;
     }
 
-    public Comment toEntity(final User user, final Article article) {
+    public Comment toEntity() {
         return Comment.builder()
                 .contents(this.contents)
-                .user(user)
-                .article(article)
                 .build();
     }
 }

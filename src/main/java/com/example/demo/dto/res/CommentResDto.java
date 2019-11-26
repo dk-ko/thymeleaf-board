@@ -14,5 +14,5 @@ public class CommentResDto {
     private LocalDateTime updatedDate;
     private String contents;
     private UserResDto userResDto;
-    private ArticleResDto articleResDto;
+    private Long articleIdx;
 }

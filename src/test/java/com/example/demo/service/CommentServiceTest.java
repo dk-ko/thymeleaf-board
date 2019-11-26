@@ -82,7 +82,7 @@ public class CommentServiceTest extends IntegrationTest {
         // then
         Optional<User> foundUser = userRepository.findById(commentResDto.getUserResDto().getIdx());
         assertNotEquals(foundUser, Optional.empty());
-        Optional<Article> foundArticle = articleRepository.findById(commentResDto.getArticleResDto().getArticleIdx());
+        Optional<Article> foundArticle = articleRepository.findById(commentResDto.getArticleIdx());
         assertNotEquals(foundArticle, Optional.empty());
     }
 

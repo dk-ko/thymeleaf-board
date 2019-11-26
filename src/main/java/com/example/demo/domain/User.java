@@ -1,7 +1,10 @@
 package com.example.demo.domain;
 
 import com.example.demo.dto.res.UserResDto;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;

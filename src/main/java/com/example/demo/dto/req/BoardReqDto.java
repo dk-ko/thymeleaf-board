@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @ToString
 public class BoardReqDto {
     @NotEmpty
-    private String name;
+    private String name; // TODO 글자 제한
 
     @Builder
     public BoardReqDto(final String name) {

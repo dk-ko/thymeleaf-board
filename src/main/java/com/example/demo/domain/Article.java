@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -112,10 +113,11 @@ public class Article extends BaseEntity implements Serializable {
                 .recommendCnt(this.recommendCnt)
                 .createdIP(this.createdIP)
                 .lastUpdatedIp(this.lastUpdatedIp)
-                .userName(this.userName)
                 .createdDate(this.createdDate)
                 .updatedDate(this.updatedDate)
-                .commentList(this.commentList)
+                .userResDto(this.user.toResDto())
+                .commentResDtoList(this.commentList.stream().map(Comment::toResDto).collect(Collectors.toList()))
+                .boardResDto(this.board.toResDto())
                 .build();
     }
 
@@ -124,10 +126,11 @@ public class Article extends BaseEntity implements Serializable {
                 .articleIdx(this.idx)
                 .title(this.title)
                 .readCnt(this.readCnt)
-                .userName(this.userName)
+                .userResDto(this.user.toResDto())
                 .createdDate(this.createdDate)
+                .updatedDate(this.updatedDate)
                 .numberOfComments(this.commentList.size())
-                .board(this.board)
+                .boardResDto(this.board.toResDto())
                 .build();
     }
 
@@ -151,6 +154,7 @@ public class Article extends BaseEntity implements Serializable {
 
     public void changeUser(final User user) {
         this.user = user;
+        this.userName = user.getName();
         user.getArticleList().add(this);
     }
 

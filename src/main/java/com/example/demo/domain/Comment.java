@@ -60,7 +60,7 @@ public class Comment extends BaseEntity implements Serializable {
                 .contents(this.contents)
                 .userResDto(this.user.toResDto())
                 .updatedDate(this.updatedDate)
-                .articleResDto(this.article.toResDto())
+                .articleIdx(this.article.getIdx())
                 .build();
     }
 

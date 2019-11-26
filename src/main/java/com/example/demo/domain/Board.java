@@ -4,6 +4,7 @@ import com.example.demo.dto.res.BoardResDto;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Board extends BaseEntity implements Serializable {
     @Column(nullable = false, unique = true, length = 15)
     private String name;
 
+    @Valid
     @OneToMany(mappedBy = "board",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,

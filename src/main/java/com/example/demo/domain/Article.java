@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +47,19 @@ public class Article extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 20)
     private String userName;
 
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_article_user"),
                 nullable = false)
     private User user;
 
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_article_board"),
                 nullable = false)
     private Board board;
 
+    @Valid
     @OneToMany(mappedBy = "article",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,

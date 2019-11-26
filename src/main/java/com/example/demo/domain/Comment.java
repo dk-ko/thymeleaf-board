@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 
 @Entity
@@ -18,11 +19,13 @@ public class Comment extends BaseEntity implements Serializable {
     @Lob
     private String contents;
 
+    @Valid
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_comment_user"),
                 nullable = false)
     private User user;
 
+    @Valid
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_comment_article"),
                 nullable = false)

@@ -217,7 +217,10 @@ public class ArticleServiceTest extends IntegrationTest {
                 .title("title")
                 .contents("contents")
                 .createdIP("invalid format")
+                .user(user)
+                .board(board)
                 .build();
+        log.info("createArticle: {}", createArticle);
     }
 
     @Test

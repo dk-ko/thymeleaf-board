@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,13 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 300)
     private String password;
 
+    @Valid
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Valid
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY)

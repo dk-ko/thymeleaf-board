@@ -44,7 +44,7 @@ public class BoardService {
      * @return 생성한 게시판 리턴
      */
     @Transactional
-    public BoardResDto createBoard(final BoardReqDto dto) { // TODO request dto or String
+    public BoardResDto createBoard(final BoardReqDto dto) {
         return boardRepository.save(dto.toEntity()).toResDto();
     }
 

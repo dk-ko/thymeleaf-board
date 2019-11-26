@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @Slf4j
 public class BaseEntityTest extends JpaTest {
@@ -31,22 +30,21 @@ public class BaseEntityTest extends JpaTest {
 
     @Test
     public void jpaAuditing_updatedDate_테스트() {
-        // TODO updatedDate 또 동작안하네.. 확인..
         // given
-        User user = userRepository.save(generatedUser(3));
+        User user = userRepository.saveAndFlush(generatedUser(3));
         User foundUser = userRepository.findById(user.getIdx()).orElseThrow(IllegalArgumentException::new);
         log.info("foundUser create date:{}", foundUser.getCreatedDate());
         log.info("foundUser updated date:{}", foundUser.getUpdatedDate());
+        assertEquals(foundUser.getCreatedDate(), foundUser.getUpdatedDate());
 
         // when
         foundUser.setPassword("1234");
-        User changedUser = userRepository.save(foundUser);
+        User changedUser = userRepository.saveAndFlush(foundUser);
 
         // then
-        assertNotNull(changedUser.getCreatedDate());
-        log.info("changedUser create date:{}", changedUser.getCreatedDate().toString());
-        log.info("changedUser update date:{}", changedUser.getUpdatedDate().toString());
-        assertNotEquals(changedUser.getCreatedDate(), changedUser.getUpdatedDate());
+        log.info("changedUser create date:{}", changedUser.getCreatedDate());
+        log.info("changedUser update date:{}", changedUser.getUpdatedDate());
+        assertTrue(changedUser.getUpdatedDate().isAfter(changedUser.getCreatedDate()));
     }
 
     private User generatedUser(int index) {

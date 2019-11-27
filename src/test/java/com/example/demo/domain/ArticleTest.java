@@ -1,22 +1,14 @@
 package com.example.demo.domain;
 
+import com.example.demo.common.JpaTest;
 import com.example.demo.erros.InvalidFormatException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@Slf4j
-@ActiveProfiles(value = "test")
-public class ArticleTest {
+public class ArticleTest extends JpaTest {
 
     private Article article;
 

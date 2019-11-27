@@ -21,7 +21,7 @@ public class ArticleUpdateReqDto {
     private String updatedIp;
 
     @Builder
-    public ArticleUpdateReqDto(String title, String contents, String updatedIp) {
+    public ArticleUpdateReqDto(final String title, final String contents, final String updatedIp) {
         IPFormatUtils.checkIP(updatedIp, "updatedIp value is invalid");
 
         this.title = title;

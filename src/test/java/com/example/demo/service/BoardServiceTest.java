@@ -3,7 +3,8 @@ package com.example.demo.service;
 import com.example.demo.common.IntegrationTest;
 import com.example.demo.domain.Article;
 import com.example.demo.domain.Board;
-import com.example.demo.domain.User;
+import com.example.demo.dto.req.BoardReqDto;
+import com.example.demo.dto.res.BoardResDto;
 import com.example.demo.repository.ArticleRepository;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.UserRepository;
@@ -64,7 +65,7 @@ public class BoardServiceTest extends IntegrationTest {
         Board savedBoard = boardRepository.save(board);
 
         // when
-        Board foundBoard = boardService.getBoard(savedBoard.getIdx());
+        BoardResDto foundBoard = boardService.getBoard(savedBoard.getIdx());
 
         // then
         assertEquals(savedBoard.getName(), foundBoard.getName());
@@ -75,9 +76,12 @@ public class BoardServiceTest extends IntegrationTest {
         // given
         Board board = generatedBoard();
         boardRepository.save(board);
+        BoardReqDto boardReqDto = BoardReqDto.builder()
+                .name("edit board name").build();
 
         // when
-        boardService.editBoard(board.getIdx(), "edit board name");
+
+        boardService.editBoard(board.getIdx(), boardReqDto);
         log.info(board.toString());
 
         // then

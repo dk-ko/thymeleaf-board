@@ -31,7 +31,7 @@ public class ArticleService {
      * @return 조회한 게시글
      */
     @Transactional
-    public ArticleResDto getArticle(Long idx) {
+    public ArticleResDto getArticle(final Long idx) {
         Article foundArticle = findByIdx(idx);
         foundArticle.addReadCnt(); // TODO 조회수는 제한 없이 할지, ip별로 구분해서 할지
         articleRepository.save(foundArticle);
@@ -47,7 +47,7 @@ public class ArticleService {
      * @exception UnauthorizedException 작성자, 관리자가 아닌 경우
      */
     @Transactional
-    public ArticleResDto editArticle(Long articleIdx, User user, ArticleUpdateReqDto dto) {
+    public ArticleResDto editArticle(final Long articleIdx, final User user, final ArticleUpdateReqDto dto) {
         Article foundArticle = findByIdx(articleIdx);
         // TODO user 데이터 가져오는 로직
         checkUser(foundArticle, user);
@@ -64,7 +64,7 @@ public class ArticleService {
      * @exception UnauthorizedException 작성자, 관리자가 아닌 경우
      */
     @Transactional
-    public boolean deleteArticle(Long articleIdx, User user) {
+    public boolean deleteArticle(final Long articleIdx, final User user) {
         // TODO user 데이터 가져오는 로직
         Article foundArticle = findByIdx(articleIdx);
         checkUser(foundArticle, user);
@@ -74,28 +74,31 @@ public class ArticleService {
 
     /**
      * 게시글 생성
-     * @param dto title, contents, createIp
+     * @param dto 게시글 데이터 title, contents, createIp
      * @param user 로그인한 사용자
      * @param boardIdx 작성할 게시판 idx
      * @return 생성한 게시글
      * @exception UnauthorizedException 유저가 아닌 경우 // TODO security 개발 후 user 부분 확인(로그인한 사용자)
      */
     @Transactional
-    public ArticleResDto createArticle(ArticleCreateReqDto dto, User user, Long boardIdx) {
-        Board foundBoard = boardService.getBoard(boardIdx);
-        return articleRepository.save(dto.toEntity(user, foundBoard)).toResDto();
+    public ArticleResDto createArticle(final ArticleCreateReqDto dto, final User user, final Long boardIdx) {
+        Board foundBoard = boardService.findByIdx(boardIdx);
+        Article article = dto.toEntity();
+        article.changeUser(user);
+        article.changeBoard(foundBoard);
+        return articleRepository.save(article).toResDto();
     }
 
     /**
-     * 게시글 목록 조회(페이징)
+     * 게시글 목록 조회(페이징, 15개, 역순)
      * @param boardIdx 조회할 게시판
      * @param pageRequest 페이징 정보
      * @return 조회한 페이지의 게시글들
      */
     @Transactional(readOnly = true)
-    public Page<ArticleListResDto> getArticlesByPageable(Long boardIdx, PageRequest pageRequest) {
+    public Page<ArticleListResDto> getArticlesByPageable(final Long boardIdx, final PageRequest pageRequest) {
         log.info(pageRequest.toString());
-        Board foundBoard = boardService.getBoard(boardIdx);
+        Board foundBoard = boardService.findByIdx(boardIdx);
         return articleRepository.findAllByBoard(foundBoard, pageRequest.of()).map(Article::toListResDto);
     }
 
@@ -105,17 +108,17 @@ public class ArticleService {
      * @exception UnauthorizedException 로그인 유저만 추천 가능
      */
     @Transactional
-    public void addRecommendCnt(Long articleIdx, User user) {
+    public void addRecommendCnt(final Long articleIdx, final User user) {
         // TODO 로그인 유저 체크 추가, 중복 추천 체크 (로그인 유저 기준)
         findByIdx(articleIdx).addRecommendCnt();
     }
 
-    private void checkUser(Article article, User user) {
+    private void checkUser(final Article article, final User user) {
         // TODO 관리자 체크 추가
         if (!article.getUser().equals(user)) throw new UnauthorizedException("User mismatch");
     }
 
-    private Article findByIdx(Long idx) {
+    Article findByIdx(final Long idx) {
         return articleRepository.findById(idx).orElseThrow(() -> new EntityNotFoundException("No Entity found for Article Idx"));
     }
 }

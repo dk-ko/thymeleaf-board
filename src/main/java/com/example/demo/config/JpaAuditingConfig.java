@@ -5,11 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing(auditorAwareRef = "commonAuditorAware", modifyOnCreate = false)
+import java.util.Optional;
+import java.util.Random;
+
+@EnableJpaAuditing (auditorAwareRef = "commonAuditorAware")
 @Configuration
 public class JpaAuditingConfig {
     @Bean
-    public AuditorAware<String> commonAuditorAware() {
-        return new CommonAuditorAware();
+    public AuditorAware<Long> commonAuditorAware() {
+        return () -> Optional.of(new Random().nextLong());
     }
 }

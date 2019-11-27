@@ -1,6 +1,5 @@
 package com.example.demo.dto.res;
 
-import com.example.demo.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,9 +16,9 @@ public class ArticleResDto {
     private Integer recommendCnt;
     private String createdIP;
     private String lastUpdatedIp;
-    private String userName;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    private List<Comment> commentList;
-    // TODO board 정보가 필요한가?
+    private UserResDto userResDto;
+    private List<CommentResDto> commentResDtoList;
+    private BoardResDto boardResDto;
 }

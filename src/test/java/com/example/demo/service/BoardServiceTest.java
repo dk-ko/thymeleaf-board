@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.common.IntegrationTest;
 import com.example.demo.domain.Article;
 import com.example.demo.domain.Board;
+import com.example.demo.domain.User;
 import com.example.demo.dto.req.BoardReqDto;
 import com.example.demo.dto.res.BoardResDto;
 import com.example.demo.repository.ArticleRepository;

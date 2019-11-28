@@ -37,11 +37,11 @@ public class Article extends BaseEntity implements Serializable {
 
     // TODO annotation
     @Column(nullable = false, length = 16)
-    @IPFormat
+//    @IPFormat
     private String createdIP;
 
     @Column(length = 16)
-    @IPFormat
+//    @IPFormat
     private String lastUpdatedIp;
 
     @Column(nullable = false, length = 20)

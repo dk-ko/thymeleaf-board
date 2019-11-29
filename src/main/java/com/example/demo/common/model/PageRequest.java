@@ -9,12 +9,12 @@ import org.springframework.data.domain.Sort;
 public final class PageRequest {
     private final int DEFAULT_SIZE = 15;
 
-    private int page;
+    private int page = 1;
     private int size = DEFAULT_SIZE;
     private Sort.Direction direction = Sort.Direction.DESC;
 
     public void setPage(int page) {
-        this.page = page <= 0 ? 1 : page;
+        this.page = page < 1 ? 1 : page;
     }
 
     public void setSize(int size) {

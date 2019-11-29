@@ -3,13 +3,15 @@ spring:
   devtools:
     livereload:
       enabled: true
+    restart:
+      enabled: false
   freemarker:
     cache: false
   jpa:
     open-in-view: false
 
 server:
-  port: 8081
+  port: 8082
 
 ---
 spring.profiles: test
@@ -35,6 +37,8 @@ spring:
     console:
       enabled: true
       path: /h2/
+  thymeleaf:
+    cache: false
 ---
 spring.profiles: dev
 spring.profiles.include: common
@@ -56,5 +60,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
+  thymeleaf:
+    cache: false
+---
+spring.profiles: prod
+spring.profiles.include: common
 
-
+spring.thymeleaf.cache: true

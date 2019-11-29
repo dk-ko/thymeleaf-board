@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>board/list.html</title>
+    <link rel="stylesheet" th:href="@{../../static/css/clear.css}"/>
+</head>
+<body>
+<!--gnb-->
+<!--header-->
+
+<!--contents-->
+<div class="contents-container">
+    <div th:class="page-header">
+        <h1 th:text="${boardName}"></h1>
+    </div>
+    <div class="pull-right">
+        <a href="/boards" class="btn btn-primary btn-block">글쓰기</a>
+    </div>
+    <br>
+
+    <div id="mainHide">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-1">No</th>
+                    <th class="col-md-5">제목</th>
+                    <th class="col-md-2">작성자</th>
+                    <th class="col-md-2">작성일</th>
+                    <th class="col-md-1">조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="article : ${articleList}">
+                    <td th:text="${article.getArticleIdx()}"></td>
+                    <td><a th:href="'/articles/' + ${article.getArticleIdx()}" th:text="${article.getTitle()}"></a>
+                        <a th:text="'[' + ${article.getNumberOfComments() + ']'}"></a></td>
+                    <td th:text="${article.getUserResDto().getName()}"></td>
+                    <td th:text="${#temporals.format(article.getUpdatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${article.getReadCnt()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<!--pagination-->
+    <nav class="pagination">
+        <ul class="pagination"
+            th:with="startPageNumber=${articleList.number/10} * 10 + 1,
+            endPageNumber=(${articleList.totalPages} > ${startPageNumber} + 9) ?
+            ${startPageNumber} + 9 : ${articleList.totalPages}">
+
+            <li><a th:href="'/boards/' + ${boardIdx} + '?page=1'">&laquo;</a></li>
+
+            <li th:style="${articleList.first} ? 'display:none'">
+                <a th:href="'/boards/' + ${boardIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
+            </li>
+
+            <li th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"
+                th:class="(${page} == ${articleList.number} + 1) ? 'active'">
+                <a th:href="'/boards/' + ${boardIdx} + '?page=' + ${page}" th:text="${page}">
+                    <span class="sr-only"></span>
+                </a>
+            </li>
+
+            <li th:style="${articleList.last} ? 'display:none'">
+                <a th:href="'/boards/' + ${boardIdx} + '?page=' + (${endPageNumber} + 1 > ${articleList.totalPages} ? ${articleList.totalPages} : ${endPageNumber} + 1)">&rsaquo;</a>
+            </li>
+            <li>
+                <a th:href="'/boards/' + ${boardIdx} + '?page=' + ${articleList.totalPages}">&raquo;</a>
+            </li>
+
+<!--footer-->
+
+            <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+            <script src="/webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+            <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

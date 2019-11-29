@@ -64,12 +64,15 @@ public class ArticleService {
      * @exception UnauthorizedException 작성자, 관리자가 아닌 경우
      */
     @Transactional
-    public boolean deleteArticle(final Long articleIdx, final User user) {
+    public Long deleteArticle(final Long articleIdx, final User user) {
         // TODO user 데이터 가져오는 로직
         Article foundArticle = findByIdx(articleIdx);
         checkUser(foundArticle, user);
+
+        Long returnBoardIdx = foundArticle.getBoard().getIdx();
         articleRepository.deleteById(articleIdx);
-        return true;
+
+        return returnBoardIdx;
     }
 
     /**
@@ -97,8 +100,11 @@ public class ArticleService {
      */
     @Transactional(readOnly = true)
     public Page<ArticleListResDto> getArticlesByPageable(final Long boardIdx, final PageRequest pageRequest) {
-        log.info(pageRequest.toString());
+        log.info("======ArticleService.getArticlesByPageable======");
+        log.info("pageRequest: {}", pageRequest);
         Board foundBoard = boardService.findByIdx(boardIdx);
+        log.info("foundBoard: {}", foundBoard);
+        log.info("pageRequest.of(): {} ", pageRequest.of());
         return articleRepository.findAllByBoard(foundBoard, pageRequest.of()).map(Article::toListResDto);
     }
 

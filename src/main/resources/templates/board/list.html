@@ -2,80 +2,90 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>board/list.html</title>
-    <link rel="stylesheet" th:href="@{../../static/css/clear.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/list.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
 </head>
 <body>
 <!--gnb-->
 <!--header-->
-
 <!--contents-->
 <div class="contents-container">
+<!--<div class="container">-->
     <div th:class="page-header">
-        <h1 th:text="${boardName}"></h1>
+        <h2 th:text="${boardName}"></h2>
     </div>
-    <div class="pull-right">
-        <a href="/boards" class="btn btn-primary btn-block">글쓰기</a>
-    </div>
-    <br>
-
+    <hr/>
     <div id="mainHide">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="col-md-1">No</th>
-                    <th class="col-md-5">제목</th>
-                    <th class="col-md-2">작성자</th>
-                    <th class="col-md-2">작성일</th>
-                    <th class="col-md-1">조회수</th>
+                    <th th:class="text-center" th:width="50" th:text="No"></th>
+                    <th th:class="text-center" th:width="500" th:text="제목"></th>
+                    <th th:class="text-center" th:width="150" th:text="작성자"></th>
+                    <th th:class="text-center" th:width="200" th:text="작성일"></th>
+                    <th th:class="text-center" th:width="70" th:text="조회수"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="article : ${articleList}">
-                    <td th:text="${article.getArticleIdx()}"></td>
+                    <td th:class="text-center" th:text="${article.getArticleIdx()}"></td>
                     <td><a th:href="'/articles/' + ${article.getArticleIdx()}" th:text="${article.getTitle()}"></a>
                         <a th:text="'[' + ${article.getNumberOfComments() + ']'}"></a></td>
-                    <td th:text="${article.getUserResDto().getName()}"></td>
-                    <td th:text="${#temporals.format(article.getUpdatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${article.getReadCnt()}"></td>
+                    <td th:class="text-center" th:text="${article.getUserResDto().getName()}"></td>
+                    <td th:class="text-center" th:text="${#temporals.format(article.getUpdatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:class="text-center" th:text="${article.getReadCnt()}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <div class="float-right">
+        <a href="/boards" class="btn btn-primary">글쓰기</a>
+    </div>
 <!--pagination-->
-    <nav class="pagination">
+    <nav class="centered" >
         <ul class="pagination"
             th:with="startPageNumber=${articleList.number/10} * 10 + 1,
             endPageNumber=(${articleList.totalPages} > ${startPageNumber} + 9) ?
             ${startPageNumber} + 9 : ${articleList.totalPages}">
 
-            <li><a th:href="'/boards/' + ${boardIdx} + '?page=1'">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=1'">&laquo;</a></li>
 
-            <li th:style="${articleList.first} ? 'display:none'">
-                <a th:href="'/boards/' + ${boardIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
+            <li class="page-item" th:style="${articleList.first} ? 'display:none'">
+                <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
             </li>
 
-            <li th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"
-                th:class="(${page} == ${articleList.number} + 1) ? 'active'">
-                <a th:href="'/boards/' + ${boardIdx} + '?page=' + ${page}" th:text="${page}">
-                    <span class="sr-only"></span>
+<!--            <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"-->
+<!--                            th:class="(${page} == ${articleList.number} + 1) ? 'page-item active'"> //todo pagination css 수정하면서 확인 -->
+            <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"
+                th:class="(${page} == ${articleList.number} + 1) ? 'page-item selected'">
+                <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + ${page}" th:text="${page}">
+                    <span class="sr-only">(current)</span>
                 </a>
             </li>
 
-            <li th:style="${articleList.last} ? 'display:none'">
-                <a th:href="'/boards/' + ${boardIdx} + '?page=' + (${endPageNumber} + 1 > ${articleList.totalPages} ? ${articleList.totalPages} : ${endPageNumber} + 1)">&rsaquo;</a>
+            <li class="page-item" th:style="${articleList.last} ? 'display:none'">
+                <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + (${endPageNumber} + 1 > ${articleList.totalPages} ? ${articleList.totalPages} : ${endPageNumber} + 1)">&rsaquo;</a>
             </li>
-            <li>
-                <a th:href="'/boards/' + ${boardIdx} + '?page=' + ${articleList.totalPages}">&raquo;</a>
+            <li class="page-item">
+                <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + ${articleList.totalPages}">&raquo;</a>
             </li>
-
-<!--footer-->
-
-            <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-            <script src="/webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
-            <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         </ul>
     </nav>
 </div>
+
+<!--footer-->
+<div class="footer">
+    <div class="container">
+        <div class="company estbox">
+            <h2 class="logo">ESTgames</h2>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

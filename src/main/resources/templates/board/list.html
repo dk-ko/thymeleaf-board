@@ -56,10 +56,10 @@
                 <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
             </li>
 
-<!--            <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"-->
-<!--                            th:class="(${page} == ${articleList.number} + 1) ? 'page-item active'"> //todo pagination css 수정하면서 확인 -->
             <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"
-                th:class="(${page} == ${articleList.number} + 1) ? 'page-item selected'">
+                            th:class="(${page} == ${articleList.number} + 1) ? 'page-item active'">
+<!--            <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"-->
+<!--                th:class="(${page} == ${articleList.number} + 1) ? 'page-item selected'"> //todo pagination css 수정하면서 확인 -->
                 <a class="page-link" th:href="'/boards/' + ${boardIdx} + '?page=' + ${page}" th:text="${page}">
                     <span class="sr-only">(current)</span>
                 </a>

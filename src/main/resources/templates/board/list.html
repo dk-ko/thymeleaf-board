@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>board/list.html</title>
     <link rel="stylesheet" th:href="@{/static/css/list.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/static/css/common.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/static/css/contents.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
 </head>
 <body>
@@ -32,7 +34,7 @@
                 <tr th:each="article : ${articleList}">
                     <td th:class="text-center" th:text="${article.getArticleIdx()}"></td>
                     <td><a th:href="'/articles/' + ${article.getArticleIdx()}" th:text="${article.getTitle()}"></a>
-                        <a th:text="'[' + ${article.getNumberOfComments() + ']'}"></a></td>
+                        <a th:text="'[' + ${article.getNumberOfComments()} + ']'"></a></td>
                     <td th:class="text-center" th:text="${article.getUserResDto().getName()}"></td>
                     <td th:class="text-center" th:text="${#temporals.format(article.getUpdatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:class="text-center" th:text="${article.getReadCnt()}"></td>

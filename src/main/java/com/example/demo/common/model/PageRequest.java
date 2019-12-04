@@ -28,6 +28,6 @@ public final class PageRequest {
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "createdDate");
+        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "idx");
     }
 }

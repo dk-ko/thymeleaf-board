@@ -75,11 +75,6 @@ a.btn.btn-primary  {
     color: white;
 }
 
-td.contents {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
 td.recommend {
     text-align: center;
 }
@@ -101,4 +96,17 @@ label {
     display: inline;
     margin-bottom: 5rem;
     width: 90%;
+}
+
+p.guide {
+    padding-left: 1rem;
+    padding-top: 2rem;
+    text-align: center;
+    color: gray;
+    font-size: 0.9rem;
+}
+
+td.contents {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }

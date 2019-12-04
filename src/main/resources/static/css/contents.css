@@ -110,3 +110,12 @@ td.contents {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+
+dd.data {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+dt {
+    display: inline-block;
+}

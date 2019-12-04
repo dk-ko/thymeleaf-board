@@ -1,14 +1,17 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.model.PageRequest;
 import com.example.demo.domain.User;
 import com.example.demo.dto.req.ArticleCreateReqDto;
 import com.example.demo.dto.req.ArticleUpdateReqDto;
 import com.example.demo.dto.res.ArticleResDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +22,19 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
     private final ArticleService articleService;
     private final UserRepository userRepository;
+    private final CommentService commentService;
 
-    @ApiOperation("게시글 조회")
+    @ApiOperation("게시글 조회(댓글 목록)")
     @GetMapping("/articles/{articleIdx}")
-    public String getArticle(@PathVariable final Long articleIdx, Model model) {
+    public String getArticle(@PathVariable final Long articleIdx, @PageableDefault PageRequest pageRequest, Model model) {
         ArticleResDto article = articleService.getArticle(articleIdx);
         model.addAttribute("article", article);
 
         model.addAttribute("boardName", article.getBoardResDto().getName());
         model.addAttribute("boardIdx", article.getBoardResDto().getBoardIdx());
-        model.addAttribute("commentList", article.getCommentResDtoList());
+
+        pageRequest.setSize(10);
+        model.addAttribute("commentList", commentService.getComments(articleIdx, pageRequest));
         return "article/contents";
     }
 

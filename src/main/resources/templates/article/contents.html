@@ -31,7 +31,7 @@
                         <td th:width="40" th:text="'작성자:'+${article.getUserResDto().getName()}"></td>
                     </div>
                     <div class="float-right">
-                        <td th:width="60" th:text="'작성일:'+${article.getCreatedDate()}"></td>
+                        <td th:width="60" th:text="'작성일:'+${#temporals.format(article.getCreatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
                         <td th:width="10" th:text="'조회수:'+${article.getReadCnt()}"></td>
                     </div>
                 </tr>
@@ -78,9 +78,9 @@
             <div th:class="comment-list">
                 <ul class="list-group">
                     <li th:class="list-group-item" th:each="comment : ${commentList}">
-                        <dl class="c_writer">
+                        <dl class="c_writer" th:with="updatedDate=${comment.getUpdatedDate()}">
                             <dt th:text="${comment.getUserResDto().getName()}"></dt>
-                            <dd th:class="data" th:text="${comment.getUpdatedDate()}"></dd>
+                            <dd th:class="data" th:text="${#temporals.format(updatedDate, 'yyyy-MM-dd HH:mm')}"></dd>
                         </dl>
                         <p th:text="${comment.getContents()}" th:class="content"></p>
                     </li>

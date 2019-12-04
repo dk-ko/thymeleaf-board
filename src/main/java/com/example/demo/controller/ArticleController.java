@@ -5,13 +5,16 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.req.ArticleCreateReqDto;
 import com.example.demo.dto.req.ArticleUpdateReqDto;
 import com.example.demo.dto.res.ArticleResDto;
+import com.example.demo.dto.res.CommentResDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.data.web.PageableDefault;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @AllArgsConstructor
 @Api(value = "Article(게시글)")
+@Slf4j
 public class ArticleController {
     private final ArticleService articleService;
     private final UserRepository userRepository;
@@ -26,7 +30,7 @@ public class ArticleController {
 
     @ApiOperation("게시글 조회(댓글 목록)")
     @GetMapping("/articles/{articleIdx}")
-    public String getArticle(@PathVariable final Long articleIdx, @PageableDefault PageRequest pageRequest, Model model) {
+    public String getArticle(@PathVariable final Long articleIdx, PageRequest pageRequest, Model model) {
         ArticleResDto article = articleService.getArticle(articleIdx);
         model.addAttribute("article", article);
 
@@ -34,9 +38,42 @@ public class ArticleController {
         model.addAttribute("boardIdx", article.getBoardResDto().getBoardIdx());
 
         pageRequest.setSize(10);
-        model.addAttribute("commentList", commentService.getComments(articleIdx, pageRequest));
+        pageRequest.setDirection(Sort.Direction.ASC);
+        Page<CommentResDto> comments = commentService.getComments(articleIdx, pageRequest);
+        model.addAttribute("commentList", comments);
         return "article/contents";
     }
+
+    // todo 게시글 조회 시 댓글 마지막 페이지로
+//    @ApiOperation("게시글 조회(댓글 목록)")
+//    @GetMapping("/articles/{articleIdx}")
+//    public String getArticle(@PathVariable final Long articleIdx, PageRequest pageRequest, Model model) {
+//        ArticleResDto article = articleService.getArticle(articleIdx);
+//        model.addAttribute("article", article);
+//
+//        model.addAttribute("boardName", article.getBoardResDto().getName());
+//        model.addAttribute("boardIdx", article.getBoardResDto().getBoardIdx());
+//
+//        pageRequest.setSize(10);
+//        pageRequest.setDirection(Sort.Direction.ASC);
+//        Page<CommentResDto> comments = commentService.getComments(articleIdx, pageRequest);
+////        comments.getPageable().
+//        model.addAttribute("commentList", comments);
+//        log.info("comments.getPageable(): {}", comments.getPageable());
+//        log.info("comments.getTotalPages(): {}", comments.getPageable());
+//        log.info("comments.getNumber(): {}", comments.getNumber());
+//        log.info("comments.getTotalElements(): {}", comments.getTotalElements());
+//        log.info("comments.getNumberOfElements(): {}", comments.getNumberOfElements());
+//        log.info("comments.getSize(): {}", comments.getSize());
+//        long lastPage = comments.getTotalElements() / comments.getSize();
+////        if (lastPage > 1) return "redirect:/articles/" + articleIdx + "?page=" + lastPage;
+//        if (lastPage > 1) getArticleByPageable(articleIdx, pageRequest, lastPage, model);
+//        else return "article/contents";
+//    }
+//
+//    private String getArticleByPageable(@PathVariable final Long articleIdx, PageRequest pageRequest, Long lastPage, Model model) {
+//        return "article/contents";
+//    }
 
     @ApiOperation("게시글 생성")
     @PostMapping("/boards/{boardIdx}")

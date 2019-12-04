@@ -79,17 +79,11 @@ td.recommend {
     text-align: center;
 }
 
-span#basic-addon2 {
+span#comment-insert {
     height: 5.5rem;
     background-color: #7e7e7e;
     border-color: #d1d1d1;
     color: white;
-}
-
-input.form-control {
-    width: 100%;
-    height: 5.5rem;
-    text-align: left;
 }
 
 label {
@@ -117,5 +111,18 @@ dd.data {
 }
 
 dt {
+    display: inline-block;
+}
+
+textarea#comment-form {
+    height: 5.5rem;
+}
+
+span#counter {
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+small#comment-help {
     display: inline-block;
 }

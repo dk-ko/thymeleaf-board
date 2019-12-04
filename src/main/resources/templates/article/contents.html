@@ -10,7 +10,9 @@
 </head>
 <body>
 <!--gnb-->
+<!--<div th:replace="layout/gnb::gnb"></div>-->
 <!--header-->
+<!--<div th:replace="layout/header::header"></div>-->
 <!--contents-->
 <div class="contents-container">
     <div th:class="page-header">
@@ -18,6 +20,7 @@
         <a th:href="'/boards'+${boardIdx}"></a> <!-- todo ajax 호출 -->
     </div>
     <hr/>
+    <input id="article_idx" type="hidden" th:value="${articleIdx}"/>
     <div class="article-container">
         <table class="table">
             <thead>
@@ -45,8 +48,6 @@
                 </tr>
             </tbody>
         </table>
-        <!--댓글 다는 form-->
-        <!--댓글 목록-->
     </div>
 
     <div id="button">
@@ -58,20 +59,20 @@
         <a href="/boards" class="btn btn-primary">삭제</a>
     </div>
     </div>
-<!--    <div class="container-block">""</div>-->
 <!-- 댓글 작성 -->
     <div th:class="comment-container">
         <hr/>
         <div th:class="comment-write">
             <div class="input-group">
                 <label>
-                    <input type="text" class="form-control" placeholder="내용을 입력해주세요." aria-describedby="comment-help">
+                    <textarea id="comment-form" type="text" class="form-control" placeholder="내용을 입력해주세요." aria-describedby="comment-help"></textarea>
                 </label>
                 <div class="input-group-append">
-                    <span class="input-group-text" id="basic-addon2" type="submit">등록</span>
+                    <span class="input-group-text" id="comment-insert" type="submit">등록</span>
                 </div>
             </div>
             <small id="comment-help" class="form-text text-muted">욕설이나 도배 등과 같이 운영정책에 어긋나는 게시물을 등록하면 불이익을 받으실 수 있습니다.</small>
+            <span style="color:#aaa;" id="counter">(0 / 최대 500자)</span>
         </div>
 <!-- 댓글 목록 -->
         <div th:if="${commentList.getTotalElements()!=0}">
@@ -121,7 +122,53 @@
     <div th:if="${commentList.getTotalElements()==0}">
         <p class="guide">등록된 댓글이 없습니다.</p>
     </div>
-<!-- footer -->
 </div>
+<!-- footer -->
+<!--<div th:replace="layout/footer::footer"></div>-->
+<!-- script -->
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript">
+    $('#comment-form').keyup(function(e) {
+        let content = $(this).val();
+        $('#counter').html("("+content.length+" / 최대 500자)");
+
+        if(content.length > 500) {
+            alert("최대 500자까지 입력 가능합니다.");
+            $(this).val(content.substring(0, 500));
+            $('#counter').html("(500 / 최대 500자)");
+        }
+
+
+    });
+</script>
+<script type="text/javascript">
+    $('#comment-insert').click(function() {
+        let commentReqDto = {
+            contents: document.getElementById('comment-form').value
+        };
+        console.log("commentReqDto:", commentReqDto);
+
+        $.ajax({
+            url: baseUrl + '/articles/' + $('#article_idx').val(),
+            type: "POST",
+            data: JSON.stringify(commentReqDto),
+            contentType: 'application/json',
+            // headers: { // todo security 설정 후
+            //     "Authorization": "Basic "
+            // },
+            dataType: 'json',
+            success: function() {
+                alert('저장 성공!');
+                location.href = '/articles/' + $('#article_idx').val();
+            },
+            error: function () {
+                alert('저장 실패!');
+            }
+        });
+    });
+</script>
 </body>
 </html>

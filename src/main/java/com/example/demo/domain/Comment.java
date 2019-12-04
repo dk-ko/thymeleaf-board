@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity implements Serializable {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     @Lob
     private String contents;
 

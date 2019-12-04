@@ -8,6 +8,7 @@ import com.example.demo.dto.req.CommentReqDto;
 import com.example.demo.dto.res.CommentResDto;
 import com.example.demo.erros.UnauthorizedException;
 import com.example.demo.repository.CommentRepository;
+import com.example.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleService articleService;
+    private final UserRepository userRepository;
 
     /**
      * 댓글 생성
@@ -36,7 +38,7 @@ public class CommentService {
         // TODO login user check
         final Article foundArticle = articleService.findByIdx(articleIdx);
         Comment comment = dto.toEntity();
-        comment.changeUser(user);
+        comment.changeUser(testUser()); // todo user 변경
         comment.changeArticle(foundArticle);
         return commentRepository.save(comment).toResDto();
     }
@@ -80,7 +82,6 @@ public class CommentService {
     public Page<CommentResDto> getComments(final Long articleIdx, final PageRequest pageRequest) {
         log.info(pageRequest.toString());
         Article foundArticle = articleService.findByIdx(articleIdx);
-        // TODO pageRequest setSize(10), setDirection(ASC) 컨트롤러에서 해야할 듯.
         return commentRepository.findAllByArticle(foundArticle, pageRequest.of()).map(Comment::toResDto);
     }
 
@@ -91,5 +92,10 @@ public class CommentService {
         // TODO 관리자체크 추가
         if (!comment.getUser().equals(user)) throw new UnauthorizedException("User mismatch");
         // TODO ArticleService의 checkUser와 같은데 리팩토링할 수 있는 방법 없을까?
+    }
+
+    // todo security 이후 삭제
+    private User testUser() { // todo security 구현 후 삭제
+        return userRepository.findById(1L).get();
     }
 }

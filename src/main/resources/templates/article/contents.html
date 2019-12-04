@@ -36,7 +36,7 @@
                     </div>
                 </tr>
                 <tr>
-                    <td colspan="3" class="contents" th:text="${article.getContents()}"></td>
+                    <td colspan="3" class="contents" th:text="${article.getContents()}" style="padding-top: 2rem; padding-bottom: 2rem;"></td>
                 </tr>
                 <tr>
                     <td colspan="3" class="recommend">
@@ -76,6 +76,7 @@
 <!-- 댓글 목록 -->
         <div th:class="comment-list">
             <ul class="list-group">
+                <div th:if="${commentList.size()!=0}">
                 <li th:class="list-group-item" th:each="comment : ${commentList}">
                     <dl class="c_writer">
                         <dt th:text="${comment.getUserResDto().getName()}"></dt>
@@ -83,6 +84,10 @@
                     </dl>
                     <p th:text="${comment.getContents()}" th:class="content"></p>
                 </li>
+                </div>
+                <div th:if="${commentList.size()==0}">
+                    <p class="guide">등록된 댓글이 없습니다.</p>
+                </div>
             </ul>
         </div>
     </div>

@@ -21,11 +21,15 @@ public class ArticleController {
     private final UserRepository userRepository;
 
     @ApiOperation("게시글 조회")
-    @GetMapping("/articles/{articleIdx}") // todo url에 board가 있는게 좋을까..? "board/1/2", "board/1/article/2" // 아니면 아예 url에 board를 없애고 articlea만? "article/2"
-    public String getArticle(/*@PathVariable final Long boardIdx,*/ @PathVariable final Long articleIdx, Model model) {
+    @GetMapping("/articles/{articleIdx}")
+    public String getArticle(@PathVariable final Long articleIdx, Model model) {
         ArticleResDto article = articleService.getArticle(articleIdx);
         model.addAttribute("article", article);
-        return "/article/contents";
+
+        model.addAttribute("boardName", article.getBoardResDto().getName());
+        model.addAttribute("boardIdx", article.getBoardResDto().getBoardIdx());
+        model.addAttribute("commentList", article.getCommentResDtoList());
+        return "article/contents";
     }
 
     @ApiOperation("게시글 생성")
@@ -48,6 +52,14 @@ public class ArticleController {
     public String editArticle(@PathVariable final Long articleIdx, ArticleUpdateReqDto articleUpdateReqDto) {
         ArticleResDto editArticle = articleService.editArticle(articleIdx, testUser(), articleUpdateReqDto);
         return "redirect:articles/" + editArticle.getArticleIdx(); // todo 수정한 '게시글 조회'로 이동
+    }
+
+    @ApiOperation("게시글 추천")
+    @PutMapping("/articles/recommend/{articleIdx}")
+    public String recommendArticle(@PathVariable final Long articleIdx) {
+        // todo check user
+        articleService.addRecommendCnt(articleIdx, testUser());
+        return "redirect:articles/" + articleIdx;
     }
 
     private User testUser() { // todo security 구현 후 삭제

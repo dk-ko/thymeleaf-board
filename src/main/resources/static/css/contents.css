@@ -110,8 +110,12 @@ dd.data {
     margin-left: 0.5rem;
 }
 
-dt {
+dt, dd{
     display: inline-block;
+}
+
+dl.c_writer {
+    margin-bottom: -1px;
 }
 
 textarea#comment-form {
@@ -125,4 +129,24 @@ span#counter {
 
 small#comment-help {
     display: inline-block;
+}
+
+#comment-edit, #comment-delete {
+    height: 0.9rem;
+    width: 0.9rem;
+    margin: 0.2rem;
+}
+
+dd.icons {
+    float: right;
+}
+
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+textarea#comment-print {
+    height: 5.5rem;
+    width: 61.12rem;
 }

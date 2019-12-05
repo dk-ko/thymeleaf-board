@@ -10,10 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -25,7 +22,7 @@ public class CommentController {
     private CommentService commentService;
 
     @ApiOperation("댓글 생성")
-    @PostMapping(value = "/articles/{articleIdx}")
+    @PostMapping("/articles/{articleIdx}")
     public @ResponseBody CommentResDto createComment(@PathVariable final Long articleIdx, @RequestBody @Valid final CommentReqDto commentReqDto, Model model) {
         log.info("params[articleIdx: {}, commentReqDto: {}]", articleIdx, commentReqDto);
         CommentResDto comment = commentService.createComment(articleIdx, User.builder().build(), commentReqDto); // todo login user
@@ -36,4 +33,21 @@ public class CommentController {
         return comment;
     }
 
+    @ApiOperation("댓글 수정")
+    @PutMapping("/comments/{commentIdx}")
+    public @ResponseBody CommentResDto editComment(@PathVariable final Long commentIdx, @RequestBody @Valid final CommentReqDto commentReqDto, Model model) {
+        log.info("params[commentIdx: {}, commentReqDto: {}]", commentIdx, commentReqDto);
+        CommentResDto editComment = commentService.editComment(commentIdx, User.builder().build(), commentReqDto);// todo login user
+        model.addAttribute("editComment", editComment);
+        log.info("model.addAttribute(\"comment\", comment);");
+        log.info("editComment: {}", editComment);
+        return editComment;
+    }
+
+    @ApiOperation("댓글 삭제")
+    @DeleteMapping("/comments/{commentIdx}")
+    public void deleteComment(@PathVariable final Long commentIdx) {
+        log.info("params[commentIdx: {}]", commentIdx);
+        commentService.deleteComment(commentIdx, User.builder().build());
+    }
 }

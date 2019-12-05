@@ -21,6 +21,7 @@
     </div>
     <hr/>
     <input id="article_idx" type="hidden" th:value="${articleIdx}"/>
+    <!-- 게시글 -->
     <div class="article-container">
         <table class="table">
             <thead>
@@ -49,9 +50,9 @@
             </tbody>
         </table>
     </div>
-
+    <!-- 버튼 -->
     <div id="button">
-    <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo ajax 호출 -->
+    <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
         <a th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
     </div>
     <div class="float-right">
@@ -59,13 +60,13 @@
         <a href="/boards" class="btn btn-primary">삭제</a>
     </div>
     </div>
-<!-- 댓글 -->
+    <!-- 댓글 -->
     <div th:class="comment-container">
         <hr/>
         <!-- 댓글 작성 -->
         <div th:class="comment-write">
             <div class="input-group">
-                <label>
+                <label for="comment-form">
                     <textarea id="comment-form" type="text" class="form-control" placeholder="내용을 입력해주세요." aria-describedby="comment-help"></textarea>
                 </label>
                 <div class="input-group-append">
@@ -79,6 +80,10 @@
                th:with="createLastPage= ${(commentList.totalElements + 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
                                   (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
                th:value="${createLastPage}">
+        <input id="deleteLastPage" type="hidden"
+               th:with="createLastPage= ${(commentList.totalElements - 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
+                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
+               th:value="${createLastPage}">
         <!-- 댓글 목록 -->
         <div th:if="${commentList.getTotalElements()!=0}">
             <div th:class="comment-list">
@@ -87,8 +92,16 @@
                         <dl class="c_writer" th:with="updatedDate=${comment.getUpdatedDate()}">
                             <dt th:text="${comment.getUserResDto().getName()}"></dt>
                             <dd th:class="data" th:text="${#temporals.format(updatedDate, 'yyyy-MM-dd HH:mm')}"></dd>
+                            <dd class="icons">
+                                <img id="comment-edit" th:src="@{/static/img/edit.png}" alt="comment-edit"/>
+                                <img id="comment-delete" th:src="@{/static/img/delete.png}" alt="comment-delete"/>
+                            </dd>
+                            <input id="comment_idx" type="hidden" th:value="${comment.idx}">
                         </dl>
-                        <p th:text="${comment.getContents()}" th:class="content"></p>
+<!--                        <p th:text="${comment.getContents()}" th:class="content"></p>-->
+                        <label for="comment-print">
+                            <textarea id="comment-print" type="text" class="form-control" rows="10" readonly="readonly" disabled th:text="${comment.getContents()}"></textarea>
+                        </label>
                     </li>
                 </ul>
             </div>
@@ -134,6 +147,7 @@
 <script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<!-- 글자수 체크 -->
 <script type="text/javascript">
     $('#comment-form').keyup(function(e) {
         let content = $(this).val();
@@ -146,6 +160,7 @@
         }
     });
 </script>
+<!-- 댓글 등록 -->
 <script type="text/javascript">
     $('#comment-insert').click(function() {
         let commentReqDto = {
@@ -163,14 +178,36 @@
             // },
             dataType: 'json',
             success: function() {
-                alert('저장 성공!');
+                alert('댓글을 등록하였습니다.');
                 location.href = '/articles/' + $('#article_idx').val() + '?page=' + $('#createLastPage').val();
             },
             error: function () {
-                alert('저장 실패!');
+                alert('권한이 없습니다.');
             }
         });
     });
+</script>
+<!-- 댓글 삭제 -->
+<script type="text/javascript">
+    $('#comment-delete').click(function() {
+        $.ajax({
+            url: baseUrl + '/comments/' + $('#comment_idx').val(),
+            type: "DELETE",
+            success: function () {
+                alert('댓글이 삭제되었습니다.');
+                document.getElementsByClassName('list-group-item').remove();
+                // location.href = '/articles/' + $('#article_idx').val() + '?page=' + $('#deleteLastPage').val();
+            },
+            error: function () {
+                alert('권한이 없습니다.');
+            }
+        })
+    })
+</script>
+<script>
+    function getLastCommentId() {
+        const commentParents = document.querySelector("")
+    }
 </script>
 </body>
 </html>

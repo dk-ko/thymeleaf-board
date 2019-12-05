@@ -54,7 +54,8 @@ public class CommentService {
     @Transactional
     public CommentResDto editComment(final Long commentIdx, final User user, final CommentReqDto dto) {
         Comment foundComment = findByIdx(commentIdx);
-        checkUser(foundComment, user);
+        checkUser(foundComment, testUser());
+//        checkUser(foundComment, user); // todo 작성자
         foundComment.editContents(dto.getContents());
         return commentRepository.save(foundComment).toResDto();
     }
@@ -68,7 +69,8 @@ public class CommentService {
     @Transactional
     public void deleteComment(final Long commentIdx, final User user) {
         Comment foundComment = findByIdx(commentIdx);
-        checkUser(foundComment, user);
+        checkUser(foundComment, testUser()); // todo 작성자
+//        checkUser(foundComment, user);
         commentRepository.deleteById(commentIdx);
     }
 

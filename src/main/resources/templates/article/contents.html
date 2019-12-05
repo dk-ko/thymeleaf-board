@@ -59,9 +59,10 @@
         <a href="/boards" class="btn btn-primary">삭제</a>
     </div>
     </div>
-<!-- 댓글 작성 -->
+<!-- 댓글 -->
     <div th:class="comment-container">
         <hr/>
+        <!-- 댓글 작성 -->
         <div th:class="comment-write">
             <div class="input-group">
                 <label>
@@ -74,7 +75,11 @@
             <small id="comment-help" class="form-text text-muted">욕설이나 도배 등과 같이 운영정책에 어긋나는 게시물을 등록하면 불이익을 받으실 수 있습니다.</small>
             <span style="color:#aaa;" id="counter">(0 / 최대 500자)</span>
         </div>
-<!-- 댓글 목록 -->
+        <input id="createLastPage" type="hidden"
+               th:with="createLastPage= ${(commentList.totalElements + 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
+                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
+               th:value="${createLastPage}">
+        <!-- 댓글 목록 -->
         <div th:if="${commentList.getTotalElements()!=0}">
             <div th:class="comment-list">
                 <ul class="list-group">
@@ -89,7 +94,7 @@
             </div>
         </div>
     </div>
-<!-- 댓글 pagination -->
+    <!-- 댓글 pagination -->
     <div th:if="${commentList.getTotalElements()!=0}">
         <nav class="centered" >
             <ul class="pagination"
@@ -98,7 +103,6 @@
                 ${startPageNumber} + 9 : ${commentList.totalPages}">
 
                 <li class="page-item"><a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=1'">&laquo;</a></li>
-
                 <li class="page-item" th:style="${commentList.first} ? 'display:none'">
                     <a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
                 </li>
@@ -140,8 +144,6 @@
             $(this).val(content.substring(0, 500));
             $('#counter').html("(500 / 최대 500자)");
         }
-
-
     });
 </script>
 <script type="text/javascript">
@@ -162,7 +164,7 @@
             dataType: 'json',
             success: function() {
                 alert('저장 성공!');
-                location.href = '/articles/' + $('#article_idx').val();
+                location.href = '/articles/' + $('#article_idx').val() + '?page=' + $('#createLastPage').val();
             },
             error: function () {
                 alert('저장 실패!');

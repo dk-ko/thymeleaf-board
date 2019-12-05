@@ -44,37 +44,6 @@ public class ArticleController {
         return "article/contents";
     }
 
-    // todo 게시글 조회 시 댓글 마지막 페이지로
-//    @ApiOperation("게시글 조회(댓글 목록)")
-//    @GetMapping("/articles/{articleIdx}")
-//    public String getArticle(@PathVariable final Long articleIdx, PageRequest pageRequest, Model model) {
-//        ArticleResDto article = articleService.getArticle(articleIdx);
-//        model.addAttribute("article", article);
-//
-//        model.addAttribute("boardName", article.getBoardResDto().getName());
-//        model.addAttribute("boardIdx", article.getBoardResDto().getBoardIdx());
-//
-//        pageRequest.setSize(10);
-//        pageRequest.setDirection(Sort.Direction.ASC);
-//        Page<CommentResDto> comments = commentService.getComments(articleIdx, pageRequest);
-////        comments.getPageable().
-//        model.addAttribute("commentList", comments);
-//        log.info("comments.getPageable(): {}", comments.getPageable());
-//        log.info("comments.getTotalPages(): {}", comments.getPageable());
-//        log.info("comments.getNumber(): {}", comments.getNumber());
-//        log.info("comments.getTotalElements(): {}", comments.getTotalElements());
-//        log.info("comments.getNumberOfElements(): {}", comments.getNumberOfElements());
-//        log.info("comments.getSize(): {}", comments.getSize());
-//        long lastPage = comments.getTotalElements() / comments.getSize();
-////        if (lastPage > 1) return "redirect:/articles/" + articleIdx + "?page=" + lastPage;
-//        if (lastPage > 1) getArticleByPageable(articleIdx, pageRequest, lastPage, model);
-//        else return "article/contents";
-//    }
-//
-//    private String getArticleByPageable(@PathVariable final Long articleIdx, PageRequest pageRequest, Long lastPage, Model model) {
-//        return "article/contents";
-//    }
-
     @ApiOperation("게시글 생성")
     @PostMapping("/boards/{boardIdx}")
     public String createArticle(@PathVariable final Long boardIdx, ArticleCreateReqDto articleCreateReqDto, Model model) {// todo test user

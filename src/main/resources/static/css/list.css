@@ -39,25 +39,6 @@ a.btn.btn-primary  {
     color: white;
 }
 
-/*.page-item:active .page-link{*/
-/*.page-item:active{*/
-li.page-link {
-    color: black;
-}
-li.page-link:hover {
-    color: white;
-    background-color: #bcbcbc;
-}
-/*li.page-item.selected{*/
-/*    !*color: white;*!*/
-/*    background-color: #7e7e7e;*/
-/*    border-color: #7e7e7e;*/
-/*}*/
-li.page-item:active {
-    background-color: #7e7e7e;
-    border-color: #7e7e7e;
-}
-
 .footer {
     height: 200px;
     background: #151515;

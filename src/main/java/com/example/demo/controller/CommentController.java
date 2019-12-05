@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+
 @Api(value = "댓글")
 @Controller
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class CommentController {
 
     @ApiOperation("댓글 생성")
     @PostMapping(value = "/articles/{articleIdx}")
-    public @ResponseBody CommentResDto createComment(@PathVariable final Long articleIdx, @RequestBody final CommentReqDto commentReqDto, Model model) {
+    public @ResponseBody CommentResDto createComment(@PathVariable final Long articleIdx, @RequestBody @Valid final CommentReqDto commentReqDto, Model model) {
         log.info("params[articleIdx: {}, commentReqDto: {}]", articleIdx, commentReqDto);
         CommentResDto comment = commentService.createComment(articleIdx, User.builder().build(), commentReqDto); // todo login user
 

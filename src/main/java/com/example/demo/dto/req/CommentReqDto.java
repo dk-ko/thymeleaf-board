@@ -3,14 +3,15 @@ package com.example.demo.dto.req;
 import com.example.demo.domain.Comment;
 import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class CommentReqDto {
-    @NotEmpty
+
+    @NotBlank
     private String contents;
 
     @Builder

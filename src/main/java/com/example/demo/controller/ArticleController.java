@@ -68,10 +68,10 @@ public class ArticleController {
 
     @ApiOperation("게시글 추천")
     @PutMapping("/articles/recommend/{articleIdx}")
-    public String recommendArticle(@PathVariable final Long articleIdx) {
+    public Integer recommendArticle(@PathVariable final Long articleIdx) {
         // todo check user
-        articleService.addRecommendCnt(articleIdx, testUser());
-        return "redirect:articles/" + articleIdx;
+        return articleService.addRecommendCnt(articleIdx, testUser());
+//        return "redirect:articles/" + articleIdx;
     }
 
     private User testUser() { // todo security 구현 후 삭제

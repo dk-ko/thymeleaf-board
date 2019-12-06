@@ -17,7 +17,8 @@
 <div class="contents-container">
     <div th:class="page-header">
         <h2 th:text="${boardName}"></h2>
-        <a th:href="'/boards'+${boardIdx}"></a> <!-- todo ajax 호출 -->
+<!--        <a th:href="'/boards'+${boardIdx}"></a> &lt;!&ndash; todo ajax 호출 &ndash;&gt;-->
+        <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
     </div>
     <hr/>
     <input id="article_idx" type="hidden" th:value="${articleIdx}"/>
@@ -44,7 +45,7 @@
                 </tr>
                 <tr>
                     <td colspan="3" class="recommend">
-                        <a th:text="추천하기" href="" class="btn btn-primary"></a>
+                        <a th:text="'추천하기(' + ${article.getRecommendCnt()}+')'" href="" class="btn btn-primary"> <!-- todo ajax -->
                     </td>
                 </tr>
             </tbody>
@@ -53,7 +54,8 @@
     <!-- 버튼 -->
     <div id="button">
     <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
-        <a th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
+        <a th:if="${currentPage} != null" th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
+        <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
     </div>
     <div class="float-right">
         <a href="/boards" class="btn btn-primary">수정</a>
@@ -76,10 +78,10 @@
             <small id="comment-help" class="form-text text-muted">욕설이나 도배 등과 같이 운영정책에 어긋나는 게시물을 등록하면 불이익을 받으실 수 있습니다.</small>
             <span style="color:#aaa;" id="counter">(0 / 최대 500자)</span>
         </div>
-        <input id="createLastPage" type="hidden"
-               th:with="createLastPage= ${(commentList.totalElements + 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
-                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
-               th:value="${createLastPage}">
+<!--        <input id="createLastPage" type="hidden"-->
+<!--               th:with="createLastPage= ${(commentList.totalElements + 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :-->
+<!--                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"-->
+<!--               th:value="${createLastPage}">-->
         <input id="deleteLastPage" type="hidden"
                th:with="createLastPage= ${(commentList.totalElements - 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
                                   (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
@@ -147,67 +149,33 @@
 <script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/common.js}"></script>
-<!-- 글자수 체크 -->
-<script type="text/javascript">
-    $('#comment-form').keyup(function(e) {
-        let content = $(this).val();
-        $('#counter').html("("+content.length+" / 최대 500자)");
+<script type="text/javascript" th:src="@{/static/js/contents.js}"></script>
 
-        if(content.length > 500) {
-            alert("최대 500자까지 입력 가능합니다.");
-            $(this).val(content.substring(0, 500));
-            $('#counter').html("(500 / 최대 500자)");
-        }
-    });
-</script>
-<!-- 댓글 등록 -->
-<script type="text/javascript">
-    $('#comment-insert').click(function() {
-        let commentReqDto = {
-            contents: document.getElementById('comment-form').value
-        };
-        console.log("commentReqDto:", commentReqDto);
-
+<!-- header 게시판으로 -->
+<script>
+    $('.page-header').click(function() {
         $.ajax({
-            url: baseUrl + '/articles/' + $('#article_idx').val(),
-            type: "POST",
-            data: JSON.stringify(commentReqDto),
-            contentType: 'application/json',
-            // headers: { // todo security 설정 후
-            //     "Authorization": "Basic "
-            // },
-            dataType: 'json',
+            url: baseUrl + '/boards/' + $('#board_idx').val(),
+            type: "GET",
             success: function() {
-                alert('댓글을 등록하였습니다.');
-                location.href = '/articles/' + $('#article_idx').val() + '?page=' + $('#createLastPage').val();
-            },
-            error: function () {
-                alert('권한이 없습니다.');
-            }
-        });
-    });
-</script>
-<!-- 댓글 삭제 -->
-<script type="text/javascript">
-    $('#comment-delete').click(function() {
-        $.ajax({
-            url: baseUrl + '/comments/' + $('#comment_idx').val(),
-            type: "DELETE",
-            success: function () {
-                alert('댓글이 삭제되었습니다.');
-                document.getElementsByClassName('list-group-item').remove();
-                // location.href = '/articles/' + $('#article_idx').val() + '?page=' + $('#deleteLastPage').val();
-            },
-            error: function () {
-                alert('권한이 없습니다.');
+                location.href = '/boards/' + $('#board_idx').val();
             }
         })
     })
 </script>
 <script>
-    function getLastCommentId() {
-        const commentParents = document.querySelector("")
-    }
+    $('.recommend').click(function () {
+        $.ajax({
+            url: baseUrl + '/articles/recommend/' + $('#article_idx').val(),
+            type: "PUT",
+            success: function () {
+                alert("추천되었습니다.")
+            },
+            error: function () {
+                alert("추천에 실패했습니다.")
+            }
+        })
+    })
 </script>
 </body>
 </html>

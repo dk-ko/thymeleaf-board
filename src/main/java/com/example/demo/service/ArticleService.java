@@ -10,7 +10,6 @@ import com.example.demo.dto.res.ArticleListResDto;
 import com.example.demo.dto.res.ArticleResDto;
 import com.example.demo.erros.UnauthorizedException;
 import com.example.demo.repository.ArticleRepository;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

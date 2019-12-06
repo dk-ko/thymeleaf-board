@@ -131,7 +131,7 @@ small#comment-help {
     display: inline-block;
 }
 
-#comment-edit, #comment-delete {
+.comment-edit, .comment-delete {
     height: 0.9rem;
     width: 0.9rem;
     margin: 0.2rem;

@@ -14,7 +14,12 @@ function init() {
     Comment.counter = document.querySelector('#counter');
     Comment.comment_list = document.querySelector('.list-group');
     Comment.insert_button = document.querySelector('#comment-insert');
-    // delete
+
+    let delete_buttons = document.querySelectorAll('.comment-delete');
+
+    delete_buttons.forEach((delete_button) => {
+        bindCommentDeleteButton(delete_button);
+    });
 
     errorHandler();
 }
@@ -88,20 +93,25 @@ function createCommentApi(article_idx, commentReqDto) {
 }
 
 function createCommentElement(comment) {
-    const date = comment.updatedDate;
-    const formatted_date = `${date[0]}-
-    ${date[1].length === 1 ? '0' + date[1] : date[1]}-
-    ${date[2].length === 1 ? '0' + date[2] : date[2]} 
-    ${date[3].length === 1 ? '0' + date[3] : date[3]}:
-    ${date[4].length === 1 ? '0' + date[4] : date[4]}`;
+    const date = comment.updatedDate.toString().split(',');
+
+    const formatted_date = `${date[0]}`
+        + '-'
+        + `${date[1].length === 1 ? '0' + date[1] : date[1]}`
+        + '-'
+        + `${date[2].length === 1 ? '0' + date[2] : date[2]}`
+        + ' '
+        + `${date[3].length === 1 ? '0' + date[3] : date[3]}`
+        + ':'
+        + `${date[4].length === 1 ? '0' + date[4] : date[4]}`;
 
     const created_comment_literal = `
         <dl class="c_writer">
             <dt>${comment.userResDto.name}</dt>
             <dd class="data">${formatted_date}</dd>
             <dd class="icons">
-                <img id="comment-edit" src="/static/img/edit.png" alt="comment-edit"/>
-                <img id="comment-delete" src="/static/img/delete.png" alt="comment-delete"/>
+                <img id="comment-edit" class="comment-edit" src="/static/img/edit.png" alt="comment-edit"/>
+                <img id="comment-delete" class="comment-delete" src="/static/img/delete.png" alt="comment-delete"/>
             </dd>
             <input id="comment_idx" type="hidden" value="${comment.idx}">
         </dl>
@@ -113,6 +123,42 @@ function createCommentElement(comment) {
     const created_comment = document.createElement('li');
     created_comment.className = 'list-group-item';
     created_comment.innerHTML = created_comment_literal;
+
     // delete event
+    const comment_delete_button = created_comment.querySelector(
+        '#comment-delete'
+    );
+    bindCommentDeleteButton(comment_delete_button);
+
     return created_comment;
+}
+
+function bindCommentDeleteButton(comment_delete_button) {
+    comment_delete_button.addEventListener('click', function(event) {
+        const parent_icon_element = comment_delete_button.parentElement;
+        const comment_element = parent_icon_element.parentElement; // c_writer
+
+        console.log(comment_element);
+        deleteCommentApi(comment_element);
+    });
+}
+
+function deleteCommentApi(comment_element) {
+    const comment_idx_element = comment_element.querySelector('#comment_idx');
+    const comment_idx = comment_idx_element.value;
+
+    $.ajax({
+        url: baseUrl + '/comments/' + comment_idx,
+        type: "DELETE",
+        success: function(data) {
+            console.log(data);
+            alert('댓글이 삭제되었습니다.');
+            comment_element.parentElement.remove()
+            // 해당 id remove
+        }//,
+        // error: function(error) {
+        //     console.log(error);
+        //     throw new Error(error);
+        // }
+    });
 }

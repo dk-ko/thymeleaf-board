@@ -47,7 +47,10 @@ public class CommentController {
     @ApiOperation("댓글 삭제")
     @DeleteMapping("/comments/{commentIdx}")
     public void deleteComment(@PathVariable final Long commentIdx) {
+        log.info("comment controller");
+        log.info("deleteComment");
         log.info("params[commentIdx: {}]", commentIdx);
         commentService.deleteComment(commentIdx, User.builder().build());
+        log.info("after commentService");
     }
 }

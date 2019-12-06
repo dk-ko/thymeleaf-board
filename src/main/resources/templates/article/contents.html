@@ -95,8 +95,8 @@
                             <dt th:text="${comment.getUserResDto().getName()}"></dt>
                             <dd th:class="data" th:text="${#temporals.format(updatedDate, 'yyyy-MM-dd HH:mm')}"></dd>
                             <dd class="icons">
-                                <img id="comment-edit" th:src="@{/static/img/edit.png}" alt="comment-edit"/>
-                                <img id="comment-delete" th:src="@{/static/img/delete.png}" alt="comment-delete"/>
+                                <img id="comment-edit" class="comment-edit" th:src="@{/static/img/edit.png}" alt="comment-edit"/>
+                                <img id="comment-delete" class="comment-delete" th:src="@{/static/img/delete.png}" alt="comment-delete"/>
                             </dd>
                             <input id="comment_idx" type="hidden" th:value="${comment.idx}">
                         </dl>

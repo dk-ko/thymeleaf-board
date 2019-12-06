@@ -43,6 +43,7 @@ body, h1, h2, h3, h4, h5, h6 {
     margin-inline-start: 0;
     margin-inline-end: 0;
     font-weight: bold;
+    cursor: pointer;
 }
 
 /*.page-item:active .page-link{*/

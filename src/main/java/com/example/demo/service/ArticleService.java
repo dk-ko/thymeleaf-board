@@ -10,6 +10,7 @@ import com.example.demo.dto.res.ArticleListResDto;
 import com.example.demo.dto.res.ArticleResDto;
 import com.example.demo.erros.UnauthorizedException;
 import com.example.demo.repository.ArticleRepository;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -114,9 +115,11 @@ public class ArticleService {
      * @exception UnauthorizedException 로그인 유저만 추천 가능
      */
     @Transactional
-    public void addRecommendCnt(final Long articleIdx, final User user) {
+    public Integer addRecommendCnt(final Long articleIdx, final User user) {
         // TODO 로그인 유저 체크 추가, 중복 추천 체크 (로그인 유저 기준)
-        findByIdx(articleIdx).addRecommendCnt();
+        Article article = findByIdx(articleIdx);
+        article.addRecommendCnt();
+        return article.getRecommendCnt();
     }
 
     private void checkUser(final Article article, final User user) {

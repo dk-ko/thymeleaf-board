@@ -135,6 +135,7 @@ small#comment-help {
     height: 0.9rem;
     width: 0.9rem;
     margin: 0.2rem;
+    cursor: pointer;
 }
 
 dd.icons {

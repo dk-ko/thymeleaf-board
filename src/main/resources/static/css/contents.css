@@ -75,7 +75,7 @@ a.btn.btn-primary  {
     color: white;
 }
 
-td.recommend {
+td#recommend {
     text-align: center;
 }
 

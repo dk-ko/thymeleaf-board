@@ -17,7 +17,6 @@
 <div class="contents-container">
     <div th:class="page-header">
         <h2 th:text="${boardName}"></h2>
-<!--        <a th:href="'/boards'+${boardIdx}"></a> &lt;!&ndash; todo ajax 호출 &ndash;&gt;-->
         <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
     </div>
     <hr/>
@@ -44,8 +43,8 @@
                     <td colspan="3" class="contents" th:text="${article.getContents()}" style="padding-top: 2rem; padding-bottom: 2rem;"></td>
                 </tr>
                 <tr>
-                    <td colspan="3" class="recommend">
-                        <a th:text="'추천하기(' + ${article.getRecommendCnt()}+')'" href="" class="btn btn-primary"> <!-- todo ajax -->
+                    <td colspan="3" id="recommend">
+                        <a th:text="'추천하기(' + ${article.getRecommendCnt()}+')'" class="btn btn-primary" style="color: white"></a>
                     </td>
                 </tr>
             </tbody>
@@ -53,14 +52,14 @@
     </div>
     <!-- 버튼 -->
     <div id="button">
-    <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
-        <a th:if="${currentPage} != null" th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
-        <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
-    </div>
-    <div class="float-right">
-        <a href="/boards" class="btn btn-primary">수정</a>
-        <a href="/boards" class="btn btn-primary">삭제</a>
-    </div>
+        <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
+            <a th:if="${currentPage} != null" th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
+            <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
+        </div>
+        <div class="float-right">
+            <a href="/boards" class="btn btn-primary">수정</a>
+            <a href="/boards" class="btn btn-primary">삭제</a>
+        </div>
     </div>
     <!-- 댓글 -->
     <div th:class="comment-container">
@@ -159,20 +158,6 @@
             type: "GET",
             success: function() {
                 location.href = '/boards/' + $('#board_idx').val();
-            }
-        })
-    })
-</script>
-<script>
-    $('.recommend').click(function () {
-        $.ajax({
-            url: baseUrl + '/articles/recommend/' + $('#article_idx').val(),
-            type: "PUT",
-            success: function () {
-                alert("추천되었습니다.")
-            },
-            error: function () {
-                alert("추천에 실패했습니다.")
             }
         })
     })

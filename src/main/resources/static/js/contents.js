@@ -90,8 +90,8 @@ function createCommentApi(article_idx, commentReqDto) {
             Comment.form.value = '';
             Comment.counter = 0;
         },
-        error: function() {
-            throw Error('권한이 없습니다');
+        error: function(error) {
+            throw Error(error);
         }
     });
 }

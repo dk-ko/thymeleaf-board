@@ -131,7 +131,7 @@ small#comment-help {
     display: inline-block;
 }
 
-.comment-edit, .comment-delete {
+.comment-edit, .comment-delete{
     height: 0.9rem;
     width: 0.9rem;
     margin: 0.2rem;
@@ -147,7 +147,7 @@ dl, ol, ul {
     margin-bottom: 0.5rem;
 }
 
-textarea#comment-print {
+textarea#comment-edit-form, textarea#comment-editing {
     height: 5.5rem;
     width: 61.12rem;
 }

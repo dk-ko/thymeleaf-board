@@ -101,8 +101,8 @@
                             <input id="comment_idx" type="hidden" th:value="${comment.idx}">
                         </dl>
 <!--                        <p th:text="${comment.getContents()}" th:class="content"></p>-->
-                        <label for="comment-print">
-                            <textarea id="comment-print" type="text" class="form-control" rows="10" readonly="readonly" disabled th:text="${comment.getContents()}"></textarea>
+                        <label for="comment-edit-form">
+                            <textarea id="comment-edit-form" type="text" class="form-control" rows="10" readonly disabled th:text="${comment.getContents()}"></textarea>
                         </label>
                     </li>
                 </ul>

@@ -16,9 +16,13 @@ function init() {
     Comment.insert_button = document.querySelector('#comment-insert');
 
     let delete_buttons = document.querySelectorAll('.comment-delete');
-
     delete_buttons.forEach((delete_button) => {
         bindCommentDeleteButton(delete_button);
+    });
+
+    let edit_buttons = document.querySelectorAll('.comment-edit');
+    edit_buttons.forEach((edit_button) => {
+        bindCommentEditButton(edit_button);
     });
 
     errorHandler();
@@ -115,8 +119,8 @@ function createCommentElement(comment) {
             </dd>
             <input id="comment_idx" type="hidden" value="${comment.idx}">
         </dl>
-        <label for="comment-print">
-            <textarea id="comment-print" type="text" class="form-control" rows="10" readonly="readonly" disabled >${comment.contents}</textarea>
+        <label for="comment-edit-form">
+            <textarea id="comment-edit-form" type="text" class="form-control" rows="10" readonly="readonly" disabled >${comment.contents}</textarea>
         </label>
     `;
 
@@ -129,6 +133,12 @@ function createCommentElement(comment) {
         '#comment-delete'
     );
     bindCommentDeleteButton(comment_delete_button);
+    
+    // edit event
+    const comment_edit_button = created_comment.querySelector(
+        '#comment-edit'
+    );
+    bindCommentEditButton(comment_edit_button);
 
     return created_comment;
 }
@@ -154,11 +164,124 @@ function deleteCommentApi(comment_element) {
             console.log(data);
             alert('댓글이 삭제되었습니다.');
             comment_element.parentElement.remove()
-            // 해당 id remove
-        }//,
-        // error: function(error) {
-        //     console.log(error);
-        //     throw new Error(error);
-        // }
+        },
+        error: function(error) {
+            console.log(error);
+            throw new Error(error);
+        }
     });
+}
+
+let COMMENT_EDIT_FORM_ID = 'comment-edit-form';
+let COMMENT_EDITING_ID = 'comment-editing';
+let COMMENT_EDIT_ID = 'comment-edit';
+function bindCommentEditButton(comment_edit_button) {
+    comment_edit_button.addEventListener('click', function() {
+        const parent_icon_element = comment_edit_button.parentElement;
+        const comment_element_writer = parent_icon_element.parentElement;
+        const comment_element_item = comment_element_writer.parentElement;
+        const comment_textarea_label = comment_element_item.querySelector('label[for="comment-edit-form"]');
+        const comment_textarea = comment_textarea_label.children.item(0);
+        const comment_textarea_old_value = comment_textarea.value;
+
+        const comment_icons = comment_element_writer.querySelector('.icons');
+        const comment_icons_firstChild = comment_icons.children.item(0);
+        console.log(comment_icons_firstChild);
+
+        if(comment_icons_firstChild.id == COMMENT_EDIT_ID) {
+            console.log('if test');
+
+            comment_textarea.removeAttribute('readonly');
+            comment_textarea.disabled = false;
+            comment_textarea.setAttribute('id', COMMENT_EDIT_FORM_ID);
+
+            let find_edit_icon = comment_element_writer.querySelector('#' + COMMENT_EDIT_ID);
+            find_edit_icon.src = '/static/img/save.png';
+            find_edit_icon.id = COMMENT_EDITING_ID;
+
+            const created_icon = document.createElement('img');
+            created_icon.id = 'comment-edit-cancel';
+            created_icon.className = 'comment-edit';
+            created_icon.src = '/static/img/cancel.png';
+            created_icon.alt = 'comment-edit-cancel';
+            created_icon.innerHTML;
+
+            let find_icons = comment_element_writer.children.item(2);
+            find_icons.insertBefore(created_icon, find_icons.firstChild);
+
+            const comment_cancel_button = created_icon;
+            bindCommentEditCancelButton(comment_cancel_button, comment_textarea, comment_textarea_old_value);
+
+        } else if(comment_icons_firstChild.id != COMMENT_EDIT_ID){
+            console.log('else test');
+            const comment_save_button = comment_element_writer.querySelector('#' + COMMENT_EDITING_ID);
+            console.log(comment_save_button);
+            bindCommentEditSaveButton(comment_save_button, comment_textarea_old_value);
+        }
+    });
+
+    function bindCommentEditCancelButton(comment_cancel_button, comment_textarea, comment_textarea_old_value) {
+        comment_cancel_button.addEventListener('click', function() {
+            resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value);
+        })
+    }
+
+    function resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value) {
+        console.log(comment_cancel_button);
+        console.log(comment_cancel_button.parentElement);
+        console.log(comment_cancel_button.firstChild());
+        const parent_icons_element = comment_cancel_button.parentElement;
+        parent_icons_element.firstChild.remove();
+
+        const save_icon = parent_icons_element.children.item(0);
+
+        save_icon.id = COMMENT_EDIT_ID;
+        save_icon.src = '/static/img/edit.png';
+        save_icon.alt = 'comment-edit';
+
+        comment_textarea.setAttribute('readonly', 'readonly');
+        comment_textarea.disabled = true;
+
+        if(comment_textarea_old_value !== undefined) comment_textarea.value = comment_textarea_old_value;
+    }
+
+    function bindCommentEditSaveButton(comment_save_button, comment_textarea_old_value) {
+        console.log('bindCommentEditSaveButton');
+        let comment_writer_element = comment_save_button.parentElement.parentElement;
+        const comment_idx = comment_writer_element.querySelector('#comment_idx').value;
+        const comment_cancel_button = comment_writer_element.querySelector('#comment-edit-cancel');
+        const comment_textarea = comment_writer_element.parentElement.querySelector('#comment-edit-form');
+
+        comment_save_button.addEventListener('click', function() {
+            console.log('event listener');
+            const comment_form = comment_save_button.parentElement.parentElement.parentElement.querySelector('#comment-edit-form');
+
+            let commentReqDto = {
+                contents: comment_form.value
+            };
+
+            editCommentApi(comment_idx, commentReqDto, comment_cancel_button, comment_textarea, comment_textarea_old_value);
+        });
+    }
+
+    function editCommentApi(comment_idx, commentReqDto, comment_cancel_button, comment_textarea, comment_textarea_old_value) {
+        console.log('editCommentApi');
+        $.ajax({
+            url: baseUrl + '/comments/' + comment_idx,
+            type: "PUT",
+            data: JSON.stringify(commentReqDto),
+            contentType: 'application/json',
+            // header: {
+            //
+            // },
+            dataType: 'json',
+            success: function(data) {
+                console.log('comment edit api:' + data);
+                resetEditCommentButton(comment_cancel_button, comment_textarea); // 2
+            }, error: function(error) {
+                resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value); // 3
+                throw Error(error)
+            }
+        });
+    }
 }

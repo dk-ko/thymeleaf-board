@@ -69,7 +69,7 @@ public class ArticleService {
     public Long deleteArticle(final Long articleIdx, final User user) {
         // TODO user 데이터 가져오는 로직
         Article foundArticle = findByIdx(articleIdx);
-        checkUser(foundArticle, user);
+        checkUser(foundArticle, testUser());
 
         Long returnBoardIdx = foundArticle.getBoard().getIdx();
         articleRepository.deleteById(articleIdx);
@@ -125,6 +125,9 @@ public class ArticleService {
 
     private void checkUser(final Article article, final User user) {
         // TODO 관리자 체크 추가
+        log.info("article.getUser().getClass(): {}", article.getUser().getClass());
+        log.info("user.getClass(): {}", user.getClass());
+
         if (!article.getUser().equals(user)) throw new UnauthorizedException("User mismatch");
     }
 

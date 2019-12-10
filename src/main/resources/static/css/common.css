@@ -65,8 +65,9 @@ li.page-item.active {
     border-color: #7e7e7e;
 }
 
-a.btn.btn-primary  {
+a.btn.btn-primary {
     background-color: #7e7e7e;
     border-color: #d1d1d1;
     color: white;
+    cursor: pointer;
 }

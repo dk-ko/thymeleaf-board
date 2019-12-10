@@ -43,9 +43,8 @@ public class ArticleController {
 
     @ApiOperation("게시글 삭제")
     @DeleteMapping("/articles/{articleIdx}")
-    public String deleteArticle(@PathVariable final Long articleIdx) {
-        Long returnBoardIdx = articleService.deleteArticle(articleIdx, User.builder().build());
-        return "redirect:boards/" + returnBoardIdx; // todo "게시판의 게시글 목록 조회"로 돌아가기
+    public Long deleteArticle(@PathVariable final Long articleIdx) {
+        return articleService.deleteArticle(articleIdx, User.builder().build());
     }
 
     @ApiOperation("게시글 수정")

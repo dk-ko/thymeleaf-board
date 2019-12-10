@@ -57,8 +57,8 @@
             <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
         </div>
         <div class="float-right">
-            <a href="/boards" class="btn btn-primary">수정</a>
-            <a href="/boards" class="btn btn-primary">삭제</a>
+            <a class="btn btn-primary" style="color: white">수정</a>
+            <a id="article-delete-button" class="btn btn-primary" style="color: white">삭제</a>
         </div>
     </div>
     <!-- 댓글 -->

@@ -30,7 +30,7 @@ function bindArticleCreateButton() {
         let boardIdx = document.querySelector('#board_idx').value;
         console.log(boardIdx);
         createArticleApi(boardIdx, articleCreateReqDto);
-    })
+    });
 }
 
 function createArticleApi(boardIdx, articleCreateReqDto) {

@@ -53,11 +53,17 @@ public class User extends BaseEntity implements Serializable {
 
     @Override
     public boolean equals(final Object o) {
+        if (this == o) return true;
         if (o == null) return false;
-        if (!this.getClass().equals(o.getClass())) return false;
+        if (!(o instanceof User)) return false;
 
         User inputUser = (User) o;
         return this.getIdx().equals(inputUser.getIdx());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override

@@ -8,6 +8,7 @@ function render() {
     bindCommentCreateButton();
     bindArticleRecommendButton();
     bindPageHeader();
+    bindArticleDeleteButton();
 }
 
 const Comment = {};
@@ -18,7 +19,8 @@ function init() {
     Comment.comment_list = document.querySelector('.list-group');
     Comment.insert_button = document.querySelector('#comment-insert');
     Article.recommend = document.querySelector('#recommend a');
-    Article.idx = document.querySelector('#article_idx');
+    Article.idx = document.querySelector('#article_idx').value;
+    Article.article_delete_button = document.querySelector('#article-delete-button');
 
     let delete_buttons = document.querySelectorAll('.comment-delete');
     delete_buttons.forEach((delete_button) => {
@@ -327,4 +329,25 @@ function articleRecommendApi() {
             throw new Error(error);
         }
     });
+}
+
+function bindArticleDeleteButton() {
+    const article_delete_button = Article.article_delete_button;
+    article_delete_button.addEventListener('click', function() {
+        if(confirm('게시글을 삭제하시겠습니까 ?')) {
+            deleteArticleApi(Article.idx);
+        }
+    });
+}
+
+function deleteArticleApi(articleIdx) {
+    $.ajax({
+        url: baseUrl + '/articles/' + articleIdx,
+        type: "DELETE",
+        success(returnBoardIdx) {
+            location.href = baseUrl + '/boards/' + returnBoardIdx;
+        }, error(error) {
+            throw new Error(error);
+        }
+    })
 }

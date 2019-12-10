@@ -15,7 +15,7 @@
 <!--<div th:replace="layout/header::header"></div>-->
 <!--contents-->
 <div class="contents-container">
-    <div th:class="page-header">
+    <div th:id="page-header">
         <h2 th:text="${boardName}"></h2>
         <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
     </div>
@@ -86,9 +86,11 @@
                                   (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
                th:value="${createLastPage}">
         <!-- 댓글 목록 -->
+        <div th:class="comment-list">
+            <ul class="list-group">
         <div th:if="${commentList.getTotalElements()!=0}">
-            <div th:class="comment-list">
-                <ul class="list-group">
+<!--            <div th:class="comment-list">-->
+<!--                <ul class="list-group">-->
                     <li th:class="list-group-item" th:each="comment : ${commentList}">
                         <dl class="c_writer" th:with="updatedDate=${comment.getUpdatedDate()}">
                             <dt th:text="${comment.getUserResDto().getName()}"></dt>
@@ -104,8 +106,9 @@
                             <textarea id="comment-edit-form" type="text" class="form-control" rows="10" readonly disabled th:text="${comment.getContents()}"></textarea>
                         </label>
                     </li>
-                </ul>
+<!--                </ul>-->
             </div>
+            </ul>
         </div>
     </div>
     <!-- 댓글 pagination -->
@@ -151,16 +154,16 @@
 <script type="text/javascript" th:src="@{/static/js/contents.js}"></script>
 
 <!-- header 게시판으로 -->
-<script>
-    $('.page-header').click(function() {
-        $.ajax({
-            url: baseUrl + '/boards/' + $('#board_idx').val(),
-            type: "GET",
-            success: function() {
-                location.href = '/boards/' + $('#board_idx').val();
-            }
-        })
-    })
-</script>
+<!--<script>-->
+<!--    $('.page-header').click(function() {-->
+<!--        $.ajax({-->
+<!--            url: baseUrl + '/boards/' + $('#board_idx').val(),-->
+<!--            type: "GET",-->
+<!--            success: function() {-->
+<!--                location.href = '/boards/' + $('#board_idx').val();-->
+<!--            }-->
+<!--        })-->
+<!--    })-->
+<!--</script>-->
 </body>
 </html>

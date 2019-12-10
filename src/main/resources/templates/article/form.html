@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>article/form.html</title>
+    <link rel="stylesheet" th:href="@{/static/css/common.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/css/articleForm.css}" type="text/css"/>
+</head>
+<body>
+<!--gnb-->
+<!--<div th:replace="layout/gnb::gnb"></div>-->
+<!--header-->
+<!--<div th:replace="layout/header::header"></div>-->
+<!--contents-->
+<div class="contents-container">
+    <div th:id="page-header">
+        <h2 th:text="${boardName}"></h2>
+        <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
+    </div>
+    <hr/>
+    <!-- 게시글 -->
+    <div class="article-container">
+        <!-- 입력 폼-->
+        <table class="table">
+        <div><p>글 제목</p>
+            <label for="article-title-form">
+                <input id="article-title-form" type="text" placeholder="제목을 입력해주세요."/>
+            </label>
+        </div>
+            <hr/>
+        <p>내용</p>
+        <div>
+            <label for="article-contents-form">
+                <textarea id="article-contents-form" rows="22" placeholder="내용을 입력해주세요."></textarea>
+            </label>
+        </div>
+        </table>
+    </div>
+    <hr/>
+    <div id="button">
+        <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
+            <a th:if="${currentPage} != null" th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
+            <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
+        </div>
+        <div class="float-right">
+            <a id="article-create-button" class="btn btn-primary" style="color: white">작성하기</a> <!-- todo ajax 호출 -->
+        </div>
+    </div>
+</div>
+<!-- footer -->
+<!--<div th:replace="layout/footer::footer"></div>-->
+<!-- script -->
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/articleForm.js}"></script>
+</body>
+</html>

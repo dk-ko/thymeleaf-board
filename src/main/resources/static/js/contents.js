@@ -7,6 +7,7 @@ function render() {
     bindCommentInput();
     bindCommentCreateButton();
     bindArticleRecommendButton();
+    bindPageHeader();
 }
 
 const Comment = {};
@@ -30,13 +31,6 @@ function init() {
     });
 
     errorHandler();
-}
-
-function errorHandler() {
-    window.onerror = function (msg, url, lineNumber) {
-        alert(msg);
-        return false;
-    };
 }
 
 function bindCommentInput() {
@@ -84,10 +78,8 @@ function createCommentApi(article_idx, commentReqDto) {
         //     "Authorization": "Basic"
         // },
         dataType: 'json',
-        success: function (data) {
-            console.log(data);
-            const created_comment_element = createCommentElement(data);
-            console.log(created_comment_element);
+        success: function (createdComment) {
+            const created_comment_element = createCommentElement(createdComment);
             const comment_list = Comment.comment_list;
             comment_list.appendChild(created_comment_element);
 
@@ -195,6 +187,7 @@ function bindCommentEditButton(comment_edit_button) {
 
         if (comment_icons_firstChild.id == COMMENT_EDIT_ID) {
             console.log('if test');
+            console.log('comment_icons_firstChild.id: ' + comment_icons_firstChild.id);
 
             comment_textarea.removeAttribute('readonly');
             comment_textarea.disabled = false;
@@ -215,10 +208,13 @@ function bindCommentEditButton(comment_edit_button) {
             find_icons.insertBefore(created_icon, find_icons.firstChild);
 
             const comment_cancel_button = created_icon;
+            console.log(comment_cancel_button);
             bindCommentEditCancelButton(comment_cancel_button, comment_textarea, comment_textarea_old_value);
 
         } else if (comment_icons_firstChild.id != COMMENT_EDIT_ID) {
             console.log('else test');
+            console.log('comment_icons_firstChild.id: ' + comment_icons_firstChild.id);
+
             const comment_save_button = comment_element_writer.querySelector('#' + COMMENT_EDITING_ID);
             console.log(comment_save_button);
             bindCommentEditSaveButton(comment_save_button, comment_textarea_old_value);
@@ -227,16 +223,24 @@ function bindCommentEditButton(comment_edit_button) {
 }
 
 function bindCommentEditCancelButton(comment_cancel_button, comment_textarea, comment_textarea_old_value) {
+    console.log(comment_cancel_button);
+    console.log(comment_textarea);
+    console.log(comment_textarea_old_value);
     comment_cancel_button.addEventListener('click', function () {
+        console.log('cancel button click event');
         resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value);
+        // comment_cancel_button.removeEventListener('click', arguments.callee);
+        // console.log(arguments.callee);
+    }, {
+        capture: false,
+        once: true,
+        passive: false
     })
 }
 
 function resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value) {
-    console.log(comment_cancel_button);
-    console.log(comment_cancel_button.parentElement);
-    console.log(comment_cancel_button.firstChild());
     const parent_icons_element = comment_cancel_button.parentElement;
+    console.log(parent_icons_element);
     parent_icons_element.firstChild.remove();
 
     const save_icon = parent_icons_element.children.item(0);
@@ -267,6 +271,12 @@ function bindCommentEditSaveButton(comment_save_button, comment_textarea_old_val
         };
 
         editCommentApi(comment_idx, commentReqDto, comment_cancel_button, comment_textarea, comment_textarea_old_value);
+        // comment_save_button.removeEventListener('click', arguments.callee);
+        // console.log(comment_save_button);
+    }, {
+        capture: false,
+        once: true,
+        passive: false
     });
 }
 
@@ -282,9 +292,10 @@ function editCommentApi(comment_idx, commentReqDto, comment_cancel_button, comme
         // },
         dataType: 'json',
         success: function (data) {
-            console.log('comment edit api:' + data);
+            console.log('comment edit api: success');
             resetEditCommentButton(comment_cancel_button, comment_textarea); // 2
         }, error: function (error) {
+            console.log('comment edit api: error');
             resetEditCommentButton(comment_cancel_button, comment_textarea, comment_textarea_old_value); // 3
             throw Error(error)
         }

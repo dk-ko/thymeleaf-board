@@ -4,7 +4,6 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.req.ArticleCreateReqDto;
 import com.example.demo.dto.req.ArticleUpdateReqDto;
 import com.example.demo.dto.res.ArticleResDto;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.thymeleaf.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
@@ -19,27 +23,35 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ArticleController {
     private final ArticleService articleService;
-    private final UserRepository userRepository;
 
     @ApiOperation("게시글 생성")
     @PostMapping("/boards/{boardIdx}")
-    public String createArticle(@PathVariable final Long boardIdx, ArticleCreateReqDto articleCreateReqDto, Model model) {// todo test user
-        ArticleResDto article = articleService.createArticle(articleCreateReqDto, testUser(), boardIdx);
+    public ArticleResDto createArticle(@PathVariable final Long boardIdx, @RequestBody ArticleCreateReqDto articleCreateReqDto, Model model) {
+        // todo test user
+
+        log.info("====ArticleController.createArticle====");
+        log.info("params[boardIdx: {}, articleCreateReqDto: {}]", boardIdx, articleCreateReqDto);
+
+        String clientIP = getClientIP();
+        log.info("clientIP: {}", clientIP);
+        articleCreateReqDto.setCreatedIP(clientIP);
+
+        ArticleResDto article = articleService.createArticle(articleCreateReqDto, User.builder().build(), boardIdx);
         model.addAttribute("article", article);
-        return "redirect:articles/" + article.getArticleIdx(); // todo 생성한 '게시글 조회'로 이동
+        return article;
     }
 
     @ApiOperation("게시글 삭제")
     @DeleteMapping("/articles/{articleIdx}")
     public String deleteArticle(@PathVariable final Long articleIdx) {
-        Long returnBoardIdx = articleService.deleteArticle(articleIdx, testUser());
+        Long returnBoardIdx = articleService.deleteArticle(articleIdx, User.builder().build());
         return "redirect:boards/" + returnBoardIdx; // todo "게시판의 게시글 목록 조회"로 돌아가기
     }
 
     @ApiOperation("게시글 수정")
     @PutMapping("/articles/{articleIdx}")
     public String editArticle(@PathVariable final Long articleIdx, ArticleUpdateReqDto articleUpdateReqDto) {
-        ArticleResDto editArticle = articleService.editArticle(articleIdx, testUser(), articleUpdateReqDto);
+        ArticleResDto editArticle = articleService.editArticle(articleIdx, User.builder().build(), articleUpdateReqDto);
         return "redirect:articles/" + editArticle.getArticleIdx(); // todo 수정한 '게시글 조회'로 이동
     }
 
@@ -49,10 +61,18 @@ public class ArticleController {
         log.info("articleController.recommendArticle");
         log.info("params[articleIdx: {}]", articleIdx);
         // todo check user
-        return articleService.addRecommendCnt(articleIdx, testUser());
+        return articleService.addRecommendCnt(articleIdx, User.builder().build());
     }
 
-    private User testUser() { // todo security 구현 후 삭제
-        return userRepository.findById(1L).get();
+    private String getClientIP() {
+        HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        String clientIp = req.getHeader("X-FORWARDED-FOR");
+        if (StringUtils.isEmpty(clientIp)||"unknown".equalsIgnoreCase(clientIp)) clientIp = req.getHeader("Proxy-Client-IP");
+        if (StringUtils.isEmpty(clientIp)||"unknown".equalsIgnoreCase(clientIp)) clientIp = req.getHeader("WL-Proxy-Client-IP");
+        if (StringUtils.isEmpty(clientIp)||"unknown".equalsIgnoreCase(clientIp)) clientIp = req.getHeader("HTTP_CLIENT_IP");
+        if (StringUtils.isEmpty(clientIp)||"unknown".equalsIgnoreCase(clientIp)) clientIp = req.getHeader("HTTP_X_FORWARDED_FOR");
+        if (StringUtils.isEmpty(clientIp)||"unknown".equalsIgnoreCase(clientIp)) clientIp = req.getRemoteAddr();
+        return clientIp;
     }
 }

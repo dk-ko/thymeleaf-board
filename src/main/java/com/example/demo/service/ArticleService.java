@@ -10,6 +10,7 @@ import com.example.demo.dto.res.ArticleListResDto;
 import com.example.demo.dto.res.ArticleResDto;
 import com.example.demo.erros.UnauthorizedException;
 import com.example.demo.repository.ArticleRepository;
+import com.example.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import javax.persistence.EntityNotFoundException;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final BoardService boardService;
+    private final UserRepository userRepository;
 
     /**
      * 게시글 1개 조회 (조회수 추가)
@@ -87,7 +89,7 @@ public class ArticleService {
     public ArticleResDto createArticle(final ArticleCreateReqDto dto, final User user, final Long boardIdx) {
         Board foundBoard = boardService.findByIdx(boardIdx);
         Article article = dto.toEntity();
-        article.changeUser(user);
+        article.changeUser(testUser());
         article.changeBoard(foundBoard);
         return articleRepository.save(article).toResDto();
     }
@@ -128,5 +130,9 @@ public class ArticleService {
 
     Article findByIdx(final Long idx) {
         return articleRepository.findById(idx).orElseThrow(() -> new EntityNotFoundException("No Entity found for Article Idx"));
+    }
+
+    private User testUser() { // todo security 구현 후 삭제
+        return userRepository.findById(1L).get();
     }
 }

@@ -69,12 +69,6 @@ div > ul > li .comment {
     padding-bottom: 20px;
 }
 
-a.btn.btn-primary  {
-    background-color: #7e7e7e;
-    border-color: #d1d1d1;
-    color: white;
-}
-
 td#recommend {
     text-align: center;
 }

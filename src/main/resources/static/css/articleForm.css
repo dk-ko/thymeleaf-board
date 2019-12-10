@@ -1,0 +1,10 @@
+.contents-container {
+    max-width: 1024px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 40px;
+}
+#article-title-form, #article-contents-form {
+    width: 1024px;
+    padding: .75rem;
+}

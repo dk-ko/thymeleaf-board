@@ -76,4 +76,12 @@ public class ApiController {
         return "/board/form";
     }
 
+    @ApiOperation("게시글 생성/수정 폼") // todo 로그인 유저
+    @GetMapping("/boards/{boardIdx}/articles")
+    public String createArticleView(@PathVariable final Long boardIdx, Model model) {
+        model.addAttribute("boardIdx", boardIdx);
+        BoardResDto foundBoard = boardService.getBoard(boardIdx);
+        model.addAttribute("boardName", foundBoard.getName());
+        return "/article/form";
+    }
 }

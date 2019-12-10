@@ -15,8 +15,9 @@
 <!--contents-->
 <div class="contents-container">
 <!--<div class="container">-->
-    <div th:class="page-header">
+    <div th:id="page-header">
         <h2 th:text="${boardName}"></h2>
+        <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
     </div>
     <hr/>
     <div id="mainHide">
@@ -48,7 +49,7 @@
         </table>
     </div>
     <div class="float-right">
-        <a href="/boards" class="btn btn-primary">글쓰기</a>
+        <a th:href="'/boards/' + ${boardIdx} + '/articles'" class="btn btn-primary">글쓰기</a>
     </div>
 <!--pagination-->
     <nav class="centered" >

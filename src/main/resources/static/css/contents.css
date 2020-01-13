@@ -1,0 +1,147 @@
+#button:after{
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.comment-container {
+}
+
+.comment-write {
+    padding: 1.2rem 0 1.2rem 2rem;
+    background: #e8e8ea;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.comment-write > form {
+    display: inline-block;
+}
+.comment-write > button {
+    display: inline-block;
+}
+
+.contents-container {
+    max-width: 1024px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 40px;
+}
+
+.form-group {
+    border: #535353 1px solid;
+    display: inline-block;
+}
+
+.centered {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+dl {
+    display: block;
+}
+dt dd {
+    display: inline-block;
+}
+
+div > ul > li .comment {
+    border: #141414 1px solid;
+}
+
+.table thead, .table tbody {
+    height: 36px;
+    border-bottom: 1px solid #bcbcbc;
+    color: #141414;
+    line-height: 25px;
+}
+
+.table thead th {
+    background: #d1d1d1;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    color: #141414;
+}
+
+.table tbody {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+td#recommend {
+    text-align: center;
+}
+
+span#comment-insert {
+    height: 5.5rem;
+    background-color: #7e7e7e;
+    border-color: #d1d1d1;
+    color: white;
+}
+
+label {
+    display: inline;
+    margin-bottom: 5rem;
+    width: 90%;
+}
+
+p.guide {
+    padding-left: 1rem;
+    padding-top: 2rem;
+    text-align: center;
+    color: gray;
+    font-size: 0.9rem;
+}
+
+td.contents {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+dd.data {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+dt, dd{
+    display: inline-block;
+}
+
+dl.c_writer {
+    margin-bottom: -1px;
+}
+
+textarea#comment-form {
+    height: 5.5rem;
+}
+
+span#counter {
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+small#comment-help {
+    display: inline-block;
+}
+
+.comment-edit, .comment-delete{
+    height: 0.9rem;
+    width: 0.9rem;
+    margin: 0.2rem;
+    cursor: pointer;
+}
+
+dd.icons {
+    float: right;
+}
+
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+textarea#comment-edit-form, textarea#comment-editing {
+    height: 5.5rem;
+    width: 61.12rem;
+}

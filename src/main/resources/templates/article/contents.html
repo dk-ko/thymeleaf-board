@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>contents.html</title>
+    <link rel="stylesheet" th:href="@{/static/css/common.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/static/css/contents.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+</head>
+<body>
+<!--gnb-->
+<!--<div th:replace="layout/gnb::gnb"></div>-->
+<!--header-->
+<!--<div th:replace="layout/header::header"></div>-->
+<!--contents-->
+<div class="contents-container">
+    <div th:id="page-header">
+        <h2 th:text="${boardName}"></h2>
+        <input id="board_idx" type="hidden" th:value="${boardIdx}"/>
+    </div>
+    <hr/>
+    <input id="article_idx" type="hidden" th:value="${articleIdx}"/>
+    <!-- 게시글 -->
+    <div class="article-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="3" th:width="1024" th:text="${article.getTitle()}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <div class="float-left">
+                        <td th:width="40" th:text="'작성자:'+${article.getUserResDto().getName()}"></td>
+                    </div>
+                    <div class="float-right">
+                        <td th:width="60" th:text="'작성일:'+${#temporals.format(article.getCreatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:width="10" th:text="'조회수:'+${article.getReadCnt()}"></td>
+                    </div>
+                </tr>
+                <tr>
+                    <td colspan="3" class="contents" th:text="${article.getContents()}" style="padding-top: 2rem; padding-bottom: 2rem;"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" id="recommend">
+                        <a th:text="'추천하기(' + ${article.getRecommendCnt()}+')'" class="btn btn-primary" style="color: white"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 버튼 -->
+    <div id="button">
+        <div class="float-left" th:with="currentPage=${#request.getParameter('page')}"> <!-- todo 댓글 페이지 기준으로 호출되서 수정해야함. -->
+            <a th:if="${currentPage} != null" th:href="'/boards/' + ${boardIdx} +'?page='+${currentPage}" class="btn btn-primary">목록으로</a>
+            <a th:if="${currentPage} == null" th:href="'/boards/' + ${boardIdx}" class="btn btn-primary">목록으로</a>
+        </div>
+        <div class="float-right">
+            <a class="btn btn-primary" style="color: white">수정</a>
+            <a id="article-delete-button" class="btn btn-primary" style="color: white">삭제</a>
+        </div>
+    </div>
+    <!-- 댓글 -->
+    <div th:class="comment-container">
+        <hr/>
+        <!-- 댓글 작성 -->
+        <div th:class="comment-write">
+            <div class="input-group">
+                <label for="comment-form">
+                    <textarea id="comment-form" type="text" class="form-control" placeholder="내용을 입력해주세요." aria-describedby="comment-help"></textarea>
+                </label>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="comment-insert" type="submit">등록</span>
+                </div>
+            </div>
+            <small id="comment-help" class="form-text text-muted">욕설이나 도배 등과 같이 운영정책에 어긋나는 게시물을 등록하면 불이익을 받으실 수 있습니다.</small>
+            <span style="color:#aaa;" id="counter">(0 / 최대 500자)</span>
+        </div>
+<!--        <input id="createLastPage" type="hidden"-->
+<!--               th:with="createLastPage= ${(commentList.totalElements + 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :-->
+<!--                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"-->
+<!--               th:value="${createLastPage}">-->
+        <input id="deleteLastPage" type="hidden"
+               th:with="createLastPage= ${(commentList.totalElements - 1) % 10} != 0 ? ${commentList.totalElements / 10} + 1 :
+                                  (${commentList.totalElements / 10} == ${commentList.totalPages} ? ${commentList.totalElements / 10} : ${commentList.totalElements / 10} + 1)"
+               th:value="${createLastPage}">
+        <!-- 댓글 목록 -->
+        <div th:class="comment-list">
+            <ul class="list-group">
+        <div th:if="${commentList.getTotalElements()!=0}">
+<!--            <div th:class="comment-list">-->
+<!--                <ul class="list-group">-->
+                    <li th:class="list-group-item" th:each="comment : ${commentList}">
+                        <dl class="c_writer" th:with="updatedDate=${comment.getUpdatedDate()}">
+                            <dt th:text="${comment.getUserResDto().getName()}"></dt>
+                            <dd th:class="data" th:text="${#temporals.format(updatedDate, 'yyyy-MM-dd HH:mm')}"></dd>
+                            <dd class="icons">
+                                <img id="comment-edit" class="comment-edit" th:src="@{/static/img/edit.png}" alt="comment-edit"/>
+                                <img id="comment-delete" class="comment-delete" th:src="@{/static/img/delete.png}" alt="comment-delete"/>
+                            </dd>
+                            <input id="comment_idx" type="hidden" th:value="${comment.idx}">
+                        </dl>
+<!--                        <p th:text="${comment.getContents()}" th:class="content"></p>-->
+                        <label for="comment-edit-form">
+                            <textarea id="comment-edit-form" type="text" class="form-control" rows="10" readonly disabled th:text="${comment.getContents()}"></textarea>
+                        </label>
+                    </li>
+<!--                </ul>-->
+            </div>
+            </ul>
+        </div>
+    </div>
+    <!-- 댓글 pagination -->
+    <div th:if="${commentList.getTotalElements()!=0}">
+        <nav class="centered" >
+            <ul class="pagination"
+                th:with="startPageNumber=${commentList.number/10} * 10 + 1,
+                endPageNumber=(${commentList.totalPages} > ${startPageNumber} + 9) ?
+                ${startPageNumber} + 9 : ${commentList.totalPages}">
+
+                <li class="page-item"><a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=1'">&laquo;</a></li>
+                <li class="page-item" th:style="${commentList.first} ? 'display:none'">
+                    <a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=' + (${startPageNumber} - 10 > 0 ? ${startPageNumber} - 10 : 1)">&lsaquo;</a>
+                </li>
+
+                <li class="page-item" th:each="page : ${#numbers.sequence(startPageNumber, endPageNumber)}"
+                    th:class="(${page} == ${commentList.number} + 1) ? 'page-item active'">
+                    <a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=' + ${page}" th:text="${page}">
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:style="${commentList.last} ? 'display:none'">
+                    <a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=' + (${endPageNumber} + 1 > ${commentList.totalPages} ? ${commentList.totalPages} : ${endPageNumber} + 1)">&rsaquo;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" th:href="'/articles/' + ${articleIdx} + '?page=' + ${commentList.totalPages}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div th:if="${commentList.getTotalElements()==0}">
+        <p class="guide">등록된 댓글이 없습니다.</p>
+    </div>
+</div>
+<!-- footer -->
+<!--<div th:replace="layout/footer::footer"></div>-->
+<!-- script -->
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/contents.js}"></script>
+
+<!-- header 게시판으로 -->
+<!--<script>-->
+<!--    $('.page-header').click(function() {-->
+<!--        $.ajax({-->
+<!--            url: baseUrl + '/boards/' + $('#board_idx').val(),-->
+<!--            type: "GET",-->
+<!--            success: function() {-->
+<!--                location.href = '/boards/' + $('#board_idx').val();-->
+<!--            }-->
+<!--        })-->
+<!--    })-->
+<!--</script>-->
+</body>
+</html>

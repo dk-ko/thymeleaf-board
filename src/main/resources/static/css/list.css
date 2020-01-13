@@ -1,0 +1,66 @@
+.text-center {
+    text-align: center;
+}
+
+a:link {
+    color: black;
+}
+a:visited {
+    color: black;
+}
+a:hover {
+    color: black;
+}
+a:active {
+    background: darkcyan;
+}
+
+a.page-link {
+    color: black;
+}
+
+.table thead, .table tbody {
+    height: 36px;
+    border-bottom: 1px solid #bcbcbc;
+    color: #141414;
+    line-height: 25px;
+}
+
+.table thead th {
+    background: #d1d1d1;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    color: #141414;
+}
+
+a.btn.btn-primary  {
+    background-color: #7e7e7e;
+    border-color: #d1d1d1;
+    color: white;
+}
+
+.footer {
+    height: 200px;
+    background: #151515;
+    padding-top: 35px;
+}
+.footer .company:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.blind {
+    overflow: hidden;
+    top: -9999px;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+}
+
+.footer .logo {
+    display: block;
+    margin-right: 22px;
+    float: left;
+    font-weight: bolder;
+}
